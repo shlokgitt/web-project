@@ -2,275 +2,637 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Hotel Booking</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Hotel Booking | TravelGo</title>
 <style>
-*{
+  :root{
+    --navy:#0b2545;
+    --blue:#1e6fd9;
+    --blue-light:#eaf2fd;
+    --teal:#13a89e;
+    --ink:#16213a;
+    --muted:#6b7686;
+    --line:#e6e9f0;
+    --bg:#f7f9fc;
+    --white:#ffffff;
+    --radius:14px;
+    --shadow: 0 8px 24px rgba(16,38,73,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{
     margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
-}
-
-body{
-    background:#f2f2f2;
-}
-
-/* Header */
-header{
-    background:#1e3799;
-    color:white;
-    padding:15px;
-    text-align:center;
-}
-
-/* Container */
-.container{
-    max-width:460px;
-    background:white;
-    margin:40px auto;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.1);
-}
-
-.container h2{
-    text-align:center;
-    margin-bottom:25px;
-}
-
-/* Form */
-label{
-    font-weight:bold;
-    display:block;
-    margin-bottom:6px;
-}
-
-input, select, button{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    font-size:15px;
-}
-
-/* Calendar title */
-.calendar-title{
-    font-weight:bold;
-    margin:20px 0 8px;
+    font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:18px 6%;
     display:flex;
+    justify-content:space-between;
     align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  header .logo{
+    font-size:1.4rem;
+    font-weight:700;
+    letter-spacing:0.5px;
+  }
+  header nav a{
+    color:#cfe0f7;
+    text-decoration:none;
+    margin-left:18px;
+    font-size:0.95rem;
+  }
+  header nav a:hover{ color:#fff; }
+
+  .page-title{
+    max-width:1100px;
+    margin:36px auto 6px;
+    padding:0 6%;
+  }
+  .page-title h1{
+    margin:0 0 6px;
+    font-size:2rem;
+  }
+  .page-title p{
+    margin:0;
+    color:var(--muted);
+  }
+
+  .search-card{
+    max-width:1100px;
+    margin:24px auto;
+    padding:24px;
+    background:var(--white);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .search-grid{
+    display:grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap:14px;
+    align-items:end;
+  }
+  @media (max-width: 900px){
+    .search-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
     gap:6px;
-}
-
-/* Button */
-button{
-    background:#1e3799;
-    color:white;
-    border:none;
-    font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#162d73;
-}
-
-/* Hotel List */
-.hotels{
-    margin-top:25px;
-    background:#ecf0f1;
-    padding:20px;
+    position:relative;
+  }
+  .field label{
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  .field input, .field select{
+    padding:11px 12px;
+    border:1px solid var(--line);
     border-radius:10px;
-}
+    font-size:0.95rem;
+    outline:none;
+    background:#fff;
+  }
+  .field input:focus, .field select:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px var(--blue-light);
+  }
+  .search-btn{
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .search-btn:hover{ background:#0f8d84; }
+  .search-btn:disabled{ background:#9fc9c5; cursor:not-allowed; }
 
-.hotels h3{
-    margin-bottom:10px;
-    color:#1e3799;
-}
+  /* autocomplete dropdown */
+  .suggestions{
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-top:4px;
+    max-height:240px;
+    overflow-y:auto;
+    box-shadow:var(--shadow);
+    z-index:30;
+    display:none;
+  }
+  .suggestions.open{ display:block; }
+  .suggestion-item{
+    padding:10px 12px;
+    cursor:pointer;
+    font-size:0.9rem;
+    border-bottom:1px solid var(--line);
+  }
+  .suggestion-item:last-child{ border-bottom:none; }
+  .suggestion-item:hover, .suggestion-item.active{
+    background:var(--blue-light);
+  }
+  .suggestion-item small{
+    display:block;
+    color:var(--muted);
+    font-size:0.78rem;
+  }
 
-.hotels ul{
-    padding-left:20px;
-}
+  .status-msg{
+    max-width:1100px;
+    margin:18px auto;
+    padding:0 6%;
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+  .status-msg.error{ color:#c0392b; }
 
-.hotels li{
-    margin-bottom:6px;
-}
+  .results-header{
+    max-width:1100px;
+    margin:30px auto 14px;
+    padding:0 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .results-header h2{
+    margin:0;
+    font-size:1.3rem;
+  }
+  .results-header span{
+    color:var(--muted);
+    font-size:0.9rem;
+  }
 
-/* Responsive */
-@media(max-width:500px){
-    .container{
-        margin:20px;
-    }
-}
-/* Improved UI */
-select, input {
-    background: #f9f9f9;
-}
+  .hotel-grid{
+    max-width:1100px;
+    margin:0 auto 60px;
+    padding:0 6%;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap:18px;
+  }
+  .hotel-card{
+    background:var(--white);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .hotel-card .badge{
+    align-self:flex-start;
+    background:var(--blue-light);
+    color:var(--blue);
+    font-size:0.72rem;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:20px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  .hotel-card h3{
+    margin:4px 0 0;
+    font-size:1.08rem;
+  }
+  .hotel-card .addr{
+    color:var(--muted);
+    font-size:0.88rem;
+    line-height:1.4;
+  }
+  .hotel-card .meta{
+    display:flex;
+    gap:14px;
+    font-size:0.82rem;
+    color:var(--muted);
+    margin-top:4px;
+  }
+  .hotel-card .select-btn{
+    margin-top:10px;
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    padding:9px 14px;
+    border-radius:8px;
+    font-size:0.88rem;
+    font-weight:600;
+    cursor:pointer;
+    align-self:flex-start;
+  }
+  .hotel-card .select-btn:hover{ background:#1859ab; }
+  .hotel-card.selected{
+    outline:2px solid var(--teal);
+  }
 
-select:focus, input:focus {
-    outline: none;
-    border-color: #1e3799;
-    box-shadow: 0 0 5px rgba(30,55,153,0.4);
-}
+  .skeleton{
+    background:linear-gradient(90deg,#eef1f6 25%,#f7f9fc 37%,#eef1f6 63%);
+    background-size:400% 100%;
+    animation:shimmer 1.4s infinite;
+    border-radius:var(--radius);
+    height:160px;
+  }
+  @keyframes shimmer{
+    0%{background-position:100% 0;}
+    100%{background-position:0 0;}
+  }
 
-/* Searchable dropdown */
-.country-wrapper {
-    position: relative;
-}
-
-#countrySearch {
-    margin-bottom: 6px;
-}
-/* 🌙 Dark Mode */
-@media (prefers-color-scheme: dark) {
-    body {
-        background: #121212;
-    }
-
-    header {
-        background: #0a1a4a;
-    }
-
-    .container {
-        background: #1e1e1e;
-        color: #ffffff;
-        box-shadow: none;
-    }
-
-    input, select {
-        background: #2a2a2a;
-        color: white;
-        border: 1px solid #444;
-    }
-
-    input::placeholder {
-        color: #aaa;
-    }
-
-    .hotels {
-        background: #2a2a2a;
-    }
-}
-
+  .booking-summary{
+    max-width:560px;
+    margin:0 auto 70px;
+    padding:24px;
+    background:var(--white);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    display:none;
+  }
+  .booking-summary.open{ display:block; }
+  .booking-summary h2{ margin-top:0; font-size:1.2rem; }
+  .booking-summary .row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+    font-size:0.92rem;
+  }
+  .booking-summary .row:last-of-type{ border-bottom:none; }
+  .booking-summary .row span:first-child{ color:var(--muted); }
+  .confirm-btn{
+    margin-top:16px;
+    width:100%;
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    padding:13px;
+    border-radius:10px;
+    font-size:0.98rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .confirm-btn:hover{ background:#0f8d84; }
+  .note{
+    max-width:1100px;
+    margin:0 auto 30px;
+    padding:0 6%;
+    font-size:0.8rem;
+    color:var(--muted);
+  }
+  footer{
+    text-align:center;
+    padding:22px;
+    color:var(--muted);
+    font-size:0.85rem;
+    border-top:1px solid var(--line);
+  }
 </style>
 </head>
-
 <body>
 
 <header>
-    <h1>🏨 Hotel Booking</h1>
+  <div class="logo">TravelGo</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="bookingchoice.html">Booking</a>
+    <a href="contactpage.html">Contact</a>
+  </nav>
 </header>
 
-<div class="container">
-    <h2>Book Your Hotel</h2>
-
-    <!-- ✅ FORM START -->
-    <form action="confirmation.html" method="get">
-
-        <!-- Country -->
-        <label>Select Country</label>
-        <input list="countries" name="country" placeholder="Search country..." required>
-
-        <!-- Choose Hotel -->
-        <label>Choose Hotel</label>
-        <select name="hotel" required>
-            <option value="">Select Hotel</option>
-            <option>Taj Mahal Palace – Mumbai, India</option>
-            <option>ITC Grand Chola – Chennai, India</option>
-            <option>The Oberoi – New Delhi, India</option>
-            <option>Leela Palace – Goa, India</option>
-            <option>The Plaza – New York, USA</option>
-            <option>Burj Al Arab – Dubai, UAE</option>
-        </select>
-
-        <!-- Dates -->
-        <div class="calendar-title">
-            📅 <span>Select Stay Dates</span>
-        </div>
-
-        <label>Check-in Date</label>
-        <input type="date" name="checkin" required>
-
-        <label>Check-out Date</label>
-        <input type="date" name="checkout" required>
-
-        <!-- Guests -->
-        <label>Number of Guests</label>
-        <input type="number" name="guests" min="1" placeholder="Enter number of guests" required>
-
-        <button type="submit">Search Hotels</button>
-
-    </form>
-    <!-- ✅ FORM END -->
-
+<div class="page-title">
+  <h1>🏨 Hotel Booking</h1>
+  <p>Search any city in the world and see real hotels pulled live from OpenStreetMap.</p>
 </div>
 
-<datalist id="countries">
-<option value="Afghanistan"><option value="Albania"><option value="Algeria">
-<option value="Andorra"><option value="Angola"><option value="Antigua and Barbuda">
-<option value="Argentina"><option value="Armenia"><option value="Australia">
-<option value="Austria"><option value="Azerbaijan"><option value="Bahamas">
-<option value="Bahrain"><option value="Bangladesh"><option value="Barbados">
-<option value="Belarus"><option value="Belgium"><option value="Belize">
-<option value="Benin"><option value="Bhutan"><option value="Bolivia">
-<option value="Bosnia and Herzegovina"><option value="Botswana">
-<option value="Brazil"><option value="Brunei"><option value="Bulgaria">
-<option value="Burkina Faso"><option value="Burundi"><option value="Cambodia">
-<option value="Cameroon"><option value="Canada"><option value="Cape Verde">
-<option value="Central African Republic"><option value="Chad"><option value="Chile">
-<option value="China"><option value="Colombia"><option value="Comoros">
-<option value="Costa Rica"><option value="Croatia"><option value="Cuba">
-<option value="Cyprus"><option value="Czech Republic"><option value="Denmark">
-<option value="Djibouti"><option value="Dominica">
-<option value="Dominican Republic"><option value="Ecuador"><option value="Egypt">
-<option value="El Salvador"><option value="Equatorial Guinea"><option value="Eritrea">
-<option value="Estonia"><option value="Eswatini"><option value="Ethiopia">
-<option value="Fiji"><option value="Finland"><option value="France">
-<option value="Gabon"><option value="Gambia"><option value="Georgia">
-<option value="Germany"><option value="Ghana"><option value="Greece">
-<option value="Grenada"><option value="Guatemala"><option value="Guinea">
-<option value="Guyana"><option value="Haiti"><option value="Honduras">
-<option value="Hungary"><option value="Iceland"><option value="India">
-<option value="Indonesia"><option value="Iran"><option value="Iraq">
-<option value="Ireland"><option value="Israel"><option value="Italy">
-<option value="Jamaica"><option value="Japan"><option value="Jordan">
-<option value="Kazakhstan"><option value="Kenya"><option value="Kiribati">
-<option value="Kuwait"><option value="Kyrgyzstan"><option value="Laos">
-<option value="Latvia"><option value="Lebanon"><option value="Lesotho">
-<option value="Liberia"><option value="Libya"><option value="Liechtenstein">
-<option value="Lithuania"><option value="Luxembourg"><option value="Madagascar">
-<option value="Malawi"><option value="Malaysia"><option value="Maldives">
-<option value="Mali"><option value="Malta"><option value="Marshall Islands">
-<option value="Mauritania"><option value="Mauritius"><option value="Mexico">
-<option value="Moldova"><option value="Monaco"><option value="Mongolia">
-<option value="Montenegro"><option value="Morocco"><option value="Mozambique">
-<option value="Myanmar"><option value="Namibia"><option value="Nauru">
-<option value="Nepal"><option value="Netherlands"><option value="New Zealand">
-<option value="Nicaragua"><option value="Niger"><option value="Nigeria">
-<option value="North Korea"><option value="North Macedonia"><option value="Norway">
-<option value="Oman"><option value="Pakistan"><option value="Palau">
-<option value="Panama"><option value="Papua New Guinea"><option value="Paraguay">
-<option value="Peru"><option value="Philippines"><option value="Poland">
-<option value="Portugal"><option value="Qatar"><option value="Romania">
-<option value="Russia"><option value="Rwanda"><option value="Saudi Arabia">
-<option value="Senegal"><option value="Serbia"><option value="Singapore">
-<option value="Slovakia"><option value="Slovenia"><option value="Somalia">
-<option value="South Africa"><option value="South Korea"><option value="Spain">
-<option value="Sri Lanka"><option value="Sudan"><option value="Suriname">
-<option value="Sweden"><option value="Switzerland"><option value="Syria">
-<option value="Taiwan"><option value="Tajikistan"><option value="Tanzania">
-<option value="Thailand"><option value="Togo"><option value="Tonga">
-<option value="Trinidad and Tobago"><option value="Tunisia"><option value="Turkey">
-<option value="Turkmenistan"><option value="Uganda"><option value="Ukraine">
-<option value="United Arab Emirates"><option value="United Kingdom">
-<option value="United States"><option value="Uruguay"><option value="Uzbekistan">
-<option value="Vanuatu"><option value="Vatican City"><option value="Venezuela">
-<option value="Vietnam"><option value="Yemen"><option value="Zambia">
-<option value="Zimbabwe">
-</datalist>
+<div class="search-card">
+  <div class="search-grid">
+    <div class="field">
+      <label for="cityInput">City</label>
+      <input type="text" id="cityInput" placeholder="Try Mumbai, Paris, Tokyo..." autocomplete="off">
+      <div class="suggestions" id="citySuggestions"></div>
+    </div>
+    <div class="field">
+      <label for="checkin">Check-in</label>
+      <input type="date" id="checkin">
+    </div>
+    <div class="field">
+      <label for="checkout">Check-out</label>
+      <input type="date" id="checkout">
+    </div>
+    <div class="field">
+      <label for="guests">Guests</label>
+      <select id="guests">
+        <option value="1">1 Guest</option>
+        <option value="2" selected>2 Guests</option>
+        <option value="3">3 Guests</option>
+        <option value="4">4 Guests</option>
+        <option value="5">5+ Guests</option>
+      </select>
+    </div>
+    <button class="search-btn" id="searchBtn">Search Hotels</button>
+  </div>
+</div>
+
+<div class="status-msg" id="statusMsg"></div>
+
+<div id="resultsArea"></div>
+
+<div class="booking-summary" id="bookingSummary"></div>
+
+<div class="note" id="apiNote"></div>
+
+<footer>© 2026 TravelGo | All Rights Reserved</footer>
+
+<script>
+/* ============================================================
+   TravelGo Hotel Booking — real city + hotel data
+   City search:  Open-Meteo Geocoding API (free, no key, CORS-open)
+   Hotel data:   OpenStreetMap Overpass API (free, no key)
+   No payment / booking is actually processed — this is a
+   front-end demo that surfaces real-world place data.
+   ============================================================ */
+
+const cityInput = document.getElementById('cityInput');
+const citySuggestions = document.getElementById('citySuggestions');
+const searchBtn = document.getElementById('searchBtn');
+const statusMsg = document.getElementById('statusMsg');
+const resultsArea = document.getElementById('resultsArea');
+const bookingSummary = document.getElementById('bookingSummary');
+const checkinInput = document.getElementById('checkin');
+const checkoutInput = document.getElementById('checkout');
+const guestsSelect = document.getElementById('guests');
+
+let selectedCity = null;   // { name, lat, lon, country }
+let debounceTimer = null;
+let activeSuggestionIndex = -1;
+
+// Default sensible dates
+(function setDefaultDates(){
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+  const dayAfter = new Date(today); dayAfter.setDate(today.getDate()+3);
+  checkinInput.value = tomorrow.toISOString().split('T')[0];
+  checkoutInput.value = dayAfter.toISOString().split('T')[0];
+  checkinInput.min = today.toISOString().split('T')[0];
+})();
+
+// ---------- City autocomplete (Open-Meteo Geocoding) ----------
+cityInput.addEventListener('input', () => {
+  const q = cityInput.value.trim();
+  selectedCity = null;
+  clearTimeout(debounceTimer);
+  if (q.length < 2) {
+    closeSuggestions();
+    return;
+  }
+  debounceTimer = setTimeout(() => fetchCitySuggestions(q), 300);
+});
+
+cityInput.addEventListener('keydown', (e) => {
+  const items = citySuggestions.querySelectorAll('.suggestion-item');
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    activeSuggestionIndex = Math.min(activeSuggestionIndex + 1, items.length - 1);
+    updateActiveSuggestion(items);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    activeSuggestionIndex = Math.max(activeSuggestionIndex - 1, 0);
+    updateActiveSuggestion(items);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (activeSuggestionIndex >= 0) items[activeSuggestionIndex].click();
+    else searchBtn.click();
+  }
+});
+
+function updateActiveSuggestion(items){
+  items.forEach(i => i.classList.remove('active'));
+  if (items[activeSuggestionIndex]) {
+    items[activeSuggestionIndex].classList.add('active');
+    items[activeSuggestionIndex].scrollIntoView({block:'nearest'});
+  }
+}
+
+async function fetchCitySuggestions(query){
+  try{
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=6&language=en&format=json`;
+    const res = await fetch(url);
+    const data = await res.json();
+    renderSuggestions(data.results || []);
+  } catch(err){
+    console.error('City lookup failed:', err);
+    closeSuggestions();
+  }
+}
+
+function renderSuggestions(results){
+  activeSuggestionIndex = -1;
+  if (!results.length){
+    closeSuggestions();
+    return;
+  }
+  citySuggestions.innerHTML = results.map((r, idx) => `
+    <div class="suggestion-item" data-idx="${idx}">
+      ${r.name}${r.admin1 ? ', ' + r.admin1 : ''}
+      <small>${r.country || ''}</small>
+    </div>
+  `).join('');
+  citySuggestions.classList.add('open');
+
+  citySuggestions.querySelectorAll('.suggestion-item').forEach((el, idx) => {
+    el.addEventListener('click', () => {
+      const r = results[idx];
+      selectedCity = { name: r.name, lat: r.latitude, lon: r.longitude, country: r.country };
+      cityInput.value = `${r.name}${r.admin1 ? ', ' + r.admin1 : ''}, ${r.country}`;
+      closeSuggestions();
+    });
+  });
+}
+
+function closeSuggestions(){
+  citySuggestions.classList.remove('open');
+  citySuggestions.innerHTML = '';
+}
+
+document.addEventListener('click', (e) => {
+  if (!citySuggestions.contains(e.target) && e.target !== cityInput){
+    closeSuggestions();
+  }
+});
+
+// ---------- Hotel search (OpenStreetMap Overpass API) ----------
+searchBtn.addEventListener('click', async () => {
+  bookingSummary.classList.remove('open');
+  bookingSummary.innerHTML = '';
+
+  if (!selectedCity){
+    showStatus('Please pick a city from the suggestions list first.', true);
+    return;
+  }
+  if (checkoutInput.value <= checkinInput.value){
+    showStatus('Check-out date must be after check-in date.', true);
+    return;
+  }
+
+  showStatus(`Searching real hotels in ${selectedCity.name}…`, false);
+  searchBtn.disabled = true;
+  searchBtn.textContent = 'Searching…';
+  renderSkeletons();
+
+  try {
+    const hotels = await fetchHotelsNearCity(selectedCity.lat, selectedCity.lon);
+    renderResults(hotels);
+  } catch(err){
+    console.error(err);
+    showStatus('Could not load hotel data right now. Please try again in a moment.', true);
+    resultsArea.innerHTML = '';
+  } finally {
+    searchBtn.disabled = false;
+    searchBtn.textContent = 'Search Hotels';
+  }
+});
+
+function renderSkeletons(){
+  resultsArea.innerHTML = `
+    <div class="results-header"><h2>Loading hotels…</h2></div>
+    <div class="hotel-grid">
+      ${Array(6).fill('<div class="skeleton"></div>').join('')}
+    </div>
+  `;
+}
+
+async function fetchHotelsNearCity(lat, lon, radiusMeters = 6000){
+  // Overpass QL: find nodes/ways tagged tourism=hotel within radius of the city center
+  const query = `
+    [out:json][timeout:25];
+    (
+      node["tourism"="hotel"](around:${radiusMeters},${lat},${lon});
+      way["tourism"="hotel"](around:${radiusMeters},${lat},${lon});
+    );
+    out center 40;
+  `;
+  const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Overpass API error: ' + res.status);
+  const data = await res.json();
+
+  const hotels = (data.elements || [])
+    .map(el => {
+      const tags = el.tags || {};
+      const name = tags.name;
+      if (!name) return null; // skip unnamed entries, not useful to show
+      const addrParts = [tags['addr:housenumber'], tags['addr:street'], tags['addr:suburb'], tags['addr:city']]
+        .filter(Boolean);
+      return {
+        name,
+        address: addrParts.length ? addrParts.join(', ') : 'Address not listed on OpenStreetMap',
+        stars: tags.stars || null,
+        phone: tags.phone || tags['contact:phone'] || null,
+        website: tags.website || tags['contact:website'] || null,
+        lat: el.lat || (el.center && el.center.lat),
+        lon: el.lon || (el.center && el.center.lon)
+      };
+    })
+    .filter(Boolean);
+
+  // de-duplicate by name+address
+  const seen = new Set();
+  const unique = [];
+  for (const h of hotels){
+    const key = h.name + '|' + h.address;
+    if (!seen.has(key)){ seen.add(key); unique.push(h); }
+  }
+  return unique.slice(0, 24);
+}
+
+function renderResults(hotels){
+  if (!hotels.length){
+    showStatus(`No hotels are tagged on OpenStreetMap within range of ${selectedCity.name}. Try a larger nearby city.`, true);
+    resultsArea.innerHTML = '';
+    return;
+  }
+
+  showStatus(`Showing ${hotels.length} real hotel${hotels.length === 1 ? '' : 's'} near ${selectedCity.name}, sourced live from OpenStreetMap.`, false);
+
+  resultsArea.innerHTML = `
+    <div class="results-header">
+      <h2>Hotels in ${selectedCity.name}</h2>
+      <span>${hotels.length} result${hotels.length === 1 ? '' : 's'}</span>
+    </div>
+    <div class="hotel-grid" id="hotelGrid"></div>
+  `;
+
+  const grid = document.getElementById('hotelGrid');
+  hotels.forEach((hotel, idx) => {
+    const card = document.createElement('div');
+    card.className = 'hotel-card';
+    card.innerHTML = `
+      <span class="badge">${hotel.stars ? hotel.stars + '★ rated' : 'OpenStreetMap listing'}</span>
+      <h3>${escapeHtml(hotel.name)}</h3>
+      <div class="addr">${escapeHtml(hotel.address)}</div>
+      <div class="meta">
+        ${hotel.phone ? `<span>📞 ${escapeHtml(hotel.phone)}</span>` : ''}
+      </div>
+      <button class="select-btn" data-idx="${idx}">Select Hotel</button>
+    `;
+    grid.appendChild(card);
+
+    card.querySelector('.select-btn').addEventListener('click', () => {
+      grid.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      showBookingSummary(hotel);
+    });
+  });
+}
+
+function showBookingSummary(hotel){
+  const nights = Math.round((new Date(checkoutInput.value) - new Date(checkinInput.value)) / 86400000);
+  bookingSummary.innerHTML = `
+    <h2>Your Selection</h2>
+    <div class="row"><span>Hotel</span><span>${escapeHtml(hotel.name)}</span></div>
+    <div class="row"><span>City</span><span>${escapeHtml(selectedCity.name)}, ${escapeHtml(selectedCity.country || '')}</span></div>
+    <div class="row"><span>Check-in</span><span>${checkinInput.value}</span></div>
+    <div class="row"><span>Check-out</span><span>${checkoutInput.value}</span></div>
+    <div class="row"><span>Nights</span><span>${nights}</span></div>
+    <div class="row"><span>Guests</span><span>${guestsSelect.value}</span></div>
+    <button class="confirm-btn" id="confirmBtn">Confirm Booking (Demo)</button>
+  `;
+  bookingSummary.classList.add('open');
+  bookingSummary.scrollIntoView({behavior:'smooth', block:'center'});
+
+  document.getElementById('confirmBtn').addEventListener('click', () => {
+    alert(`Demo booking confirmed for ${hotel.name}.`);
+  });
+}
+
+function showStatus(msg, isError){
+  statusMsg.textContent = msg;
+  statusMsg.className = 'status-msg' + (isError ? ' error' : '');
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+document.getElementById('apiNote').textContent =
+  'City data: Open-Meteo Geocoding API. Hotel listings: OpenStreetMap (via Overpass API), community-sourced data — names and addresses are real, but availability and pricing are not live and no payment is processed.';
+</script>
 
 </body>
 </html>
