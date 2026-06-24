@@ -2,170 +2,554 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Flight Booking</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Flight Booking | TravelGo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-body{
-    background:#eef2f7;
-    font-family: Arial, sans-serif;
-}
+  :root{
+    --ink:#0B1622;
+    --ink-raised:#142536;
+    --ink-line:#1F3850;
+    --terracotta:#C9542C;
+    --terracotta-bright:#E0673B;
+    --amber:#E8A33D;
+    --paper:#F4F1E8;
+    --slate:#8FA3B8;
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+    --radius:16px;
+    --shadow: 0 20px 50px rgba(0,0,0,0.45);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--ink);
+    color:var(--paper);
+  }
+  h1,h2,h3{ font-family:var(--font-display); font-weight:600; }
 
-header{
-    background:#1e3799;
-    color:white;
-    padding:15px;
-    text-align:center;
-}
+  header{
+    background:var(--ink-raised);
+    border-bottom:1px solid var(--ink-line);
+    color:#fff;
+    padding:18px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  header .logo{ font-size:1.4rem; font-weight:700; }
+  header .logo span{ color:var(--terracotta); }
+  header nav a{
+    color:var(--slate);
+    text-decoration:none;
+    margin-left:18px;
+    font-size:0.95rem;
+    font-weight:500;
+  }
+  header nav a:hover{ color:var(--paper); }
 
-.container{
-    max-width:450px;
-    background:white;
-    margin:40px auto;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.1);
-}
-
-label{
-    font-weight:bold;
+  .page-title{ max-width:1100px; margin:40px auto 6px; padding:0 6%; }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--terracotta);
+    margin-bottom:10px;
     display:block;
-    margin-bottom:6px;
-}
+  }
+  .page-title h1{ margin:0 0 8px; font-size:2.1rem; color:#fff; }
+  .page-title p{ margin:0; color:var(--slate); }
 
-input, button{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border:1px solid #ccc;
-    border-radius:6px;
-}
-
-.calendar-title{
-    font-weight:bold;
-    margin:15px 0 5px;
-}
-
-button{
-    background:#1e3799;
-    color:white;
-    border:none;
-    font-size:16px;
-}
-/* Hide checkbox */
-#showFlights{
-    display:none;
-}
-
-/* Search button style */
-.search-btn{
-    display:block;
-    text-align:center;
-    background:#1e3799;
-    color:white;
-    padding:12px;
-    border-radius:6px;
+  .search-card{
+    max-width:1100px;
+    margin:28px auto;
+    padding:26px;
+    background:var(--ink-raised);
+    border:1px solid var(--ink-line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .search-grid{
+    display:grid;
+    grid-template-columns: 1.4fr 1.4fr 1fr 1fr auto;
+    gap:14px;
+    align-items:end;
+  }
+  @media (max-width: 900px){
+    .search-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .field{ display:flex; flex-direction:column; gap:6px; position:relative; }
+  .field label{
+    font-size:0.74rem; font-weight:600; color:var(--slate);
+    text-transform:uppercase; letter-spacing:0.5px; font-family:var(--font-mono);
+  }
+  .field input, .field select{
+    padding:12px 13px; border:1px solid var(--ink-line); border-radius:9px;
+    font-size:0.95rem; outline:none; background:var(--ink); color:var(--paper);
+    font-family:var(--font-body);
+  }
+  .field input:focus, .field select:focus{ border-color:var(--terracotta); }
+  .swap-btn{
+    align-self:center;
+    background:rgba(201,84,44,0.15);
+    border:1px solid var(--ink-line);
+    width:36px; height:36px;
+    border-radius:50%;
     cursor:pointer;
-    font-size:16px;
-}
+    font-size:1rem;
+    color:var(--terracotta-bright);
+    margin-bottom:11px;
+    transition:background 0.2s;
+  }
+  .swap-btn:hover{ background:rgba(201,84,44,0.3); }
+  .search-btn{
+    background:var(--terracotta); color:#fff; border:none;
+    padding:13px 24px; border-radius:9px; font-size:0.95rem;
+    font-weight:700; cursor:pointer; white-space:nowrap;
+    transition:background 0.2s;
+  }
+  .search-btn:hover{ background:var(--terracotta-bright); }
+  .search-btn:disabled{ background:#5a4034; cursor:not-allowed; }
 
-/* Flight results hidden by default */
-.results{
-    display:none;
-    margin-top:20px;
-}
+  .suggestions{
+    position:absolute; top:100%; left:0; right:0; background:var(--ink-raised);
+    border:1px solid var(--ink-line); border-radius:10px; margin-top:4px;
+    max-height:240px; overflow-y:auto; box-shadow:var(--shadow);
+    z-index:30; display:none;
+  }
+  .suggestions.open{ display:block; }
+  .suggestion-item{ padding:11px 13px; cursor:pointer; font-size:0.9rem; border-bottom:1px solid var(--ink-line); color:var(--paper); }
+  .suggestion-item:last-child{ border-bottom:none; }
+  .suggestion-item:hover, .suggestion-item.active{ background:var(--ink); }
+  .suggestion-item small{ display:block; color:var(--slate); font-size:0.78rem; }
+  .iata-tag{
+    display:inline-block; background:var(--terracotta); color:#fff;
+    font-size:0.7rem; font-weight:700; padding:1px 6px; border-radius:5px; margin-right:6px;
+    font-family:var(--font-mono);
+  }
 
-/* Show results when checkbox is checked */
-#showFlights:checked ~ .results{
-    display:block;
-}
+  .status-msg{ max-width:1100px; margin:18px auto; padding:0 6%; color:var(--slate); font-size:0.95rem; }
+  .status-msg.error{ color:var(--terracotta-bright); }
 
-/* Flight cards */
-.flight-card{
-    background:#f9fbff;
-    border:1px solid #ddd;
-    border-radius:8px;
-    padding:15px;
-    margin-bottom:15px;
-}
+  .route-banner{ max-width:1100px; margin:0 auto 6px; padding:0 6%; }
+  .route-banner .card{
+    background:var(--ink-raised); border:1px solid var(--ink-line); color:#fff;
+    border-radius:var(--radius); padding:22px 26px; display:flex;
+    align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .route-banner .route{ font-size:1.2rem; font-weight:700; font-family:var(--font-mono); letter-spacing:1px; }
+  .route-banner .route small{ display:block; font-weight:400; color:var(--slate); font-size:0.78rem; margin-top:4px; font-family:var(--font-body); letter-spacing:normal; }
+  .route-banner .dist{ font-size:0.9rem; color:var(--amber); font-family:var(--font-mono); }
 
-.flight-card h3{
-    color:#1e3799;
-    margin-bottom:8px;
-}
+  .results-header{
+    max-width:1100px; margin:30px auto 16px; padding:0 6%;
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;
+  }
+  .results-header h2{ margin:0; font-size:1.4rem; color:#fff; }
+  .results-header span{ color:var(--slate); font-size:0.88rem; font-family:var(--font-mono); }
 
-.flight-card button{
-    margin-top:10px;
-    background:#ff9f1a;
-    border:none;
-    padding:10px;
-    border-radius:6px;
-    width:100%;
-    cursor:pointer;
-}
+  .flight-grid{
+    max-width:1100px; margin:0 auto 30px; padding:0 6%;
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:20px;
+  }
+  .flight-card{
+    background:var(--ink-raised); border:1px solid var(--ink-line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px; display:flex; flex-direction:column; gap:9px;
+    transition:transform 0.2s;
+  }
+  .flight-card:hover{ transform:translateY(-3px); }
+  .flight-card .badge{
+    align-self:flex-start; background:rgba(201,84,44,0.15); color:var(--amber);
+    font-size:0.7rem; font-weight:700; padding:4px 10px; border-radius:20px;
+    text-transform:uppercase; letter-spacing:0.4px; font-family:var(--font-mono);
+  }
+  .flight-card h3{ margin:4px 0 0; font-size:1.15rem; color:#fff; font-family:var(--font-mono); letter-spacing:1px; }
+  .flight-card .meta-row{ display:flex; justify-content:space-between; font-size:0.85rem; color:var(--slate); }
+  .flight-card .meta-row b{ color:var(--paper); font-weight:600; font-family:var(--font-mono); }
+  .flight-card .select-btn{
+    margin-top:10px; background:transparent; border:1px solid var(--terracotta);
+    color:var(--terracotta-bright); padding:10px 16px; border-radius:8px; font-size:0.88rem;
+    font-weight:700; cursor:pointer; align-self:flex-start; transition:background 0.2s, color 0.2s;
+  }
+  .flight-card .select-btn:hover{ background:var(--terracotta); color:#fff; }
+  .flight-card.selected{ outline:2px solid var(--terracotta); }
 
+  .skeleton{
+    background:linear-gradient(90deg, var(--ink-raised) 25%, var(--ink-line) 37%, var(--ink-raised) 63%);
+    background-size:400% 100%; animation:shimmer 1.4s infinite;
+    border-radius:var(--radius); height:140px;
+  }
+  @keyframes shimmer{ 0%{background-position:100% 0;} 100%{background-position:0 0;} }
+
+  .booking-summary{
+    max-width:560px; margin:0 auto 70px; padding:28px; background:var(--ink-raised);
+    border:1px solid var(--ink-line); border-radius:var(--radius); box-shadow:var(--shadow); display:none;
+  }
+  .booking-summary.open{ display:block; }
+  .booking-summary h2{ margin-top:0; font-size:1.3rem; color:#fff; }
+  .booking-summary .row{
+    display:flex; justify-content:space-between; padding:10px 0;
+    border-bottom:1px dashed var(--ink-line); font-size:0.92rem;
+  }
+  .booking-summary .row:last-of-type{ border-bottom:none; }
+  .booking-summary .row span:first-child{ color:var(--slate); }
+  .booking-summary .row span:last-child{ font-family:var(--font-mono); color:var(--paper); }
+  .confirm-btn{
+    margin-top:18px; width:100%; background:var(--terracotta); color:#fff; border:none;
+    padding:14px; border-radius:10px; font-size:0.98rem; font-weight:700; cursor:pointer;
+    transition:background 0.2s;
+  }
+  .confirm-btn:hover{ background:var(--terracotta-bright); }
+
+  .note{ max-width:1100px; margin:0 auto 30px; padding:0 6%; font-size:0.8rem; color:var(--slate); font-family:var(--font-mono); }
+  footer{
+    text-align:center; padding:22px; color:var(--slate); font-size:0.85rem;
+    border-top:1px solid var(--ink-line); background:var(--ink-raised); font-family:var(--font-mono);
+  }
+
+  .empty-state{
+    max-width:1100px; margin:0 auto 40px; padding:0 6%; color:var(--slate); font-size:0.92rem;
+  }
 </style>
 </head>
-
 <body>
 
 <header>
-    <h1>✈️ Flight Booking</h1>
+  <div class="logo">Travel<span>Go</span></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="bookingchoice.html">Booking</a>
+    <a href="contactpage.html">Contact</a>
+  </nav>
 </header>
 
-<div class="container">
-    <form>
-      <form>
-    <label>From</label>
-    <input type="text" placeholder="Departure city" required>
-
-    <label>To</label>
-    <input type="text" placeholder="Destination city" required>
-
-    <div class="calendar-title">📅 Select Travel Dates</div>
-
-    <label>Departure Date</label>
-    <input type="date" required>
-
-    <label>Arrival Date</label>
-    <input type="date" required>
-
-    <label>Number of Passengers</label>
-    <input type="number" min="1" placeholder="Passengers" required>
-
-    <!-- Hidden checkbox -->
-    <input type="checkbox" id="showFlights">
-
-    <!-- Button -->
-    <label for="showFlights" class="search-btn">Search Flights</label>
-</form>
-
-<!-- Flight Results -->
-<div class="results">
-    <div class="flight-card">
-        <h3>✈️ TravelGo Air</h3>
-        <p>🕒 08:30 AM</p>
-        <p>💰 ₹5,500</p>
-        <button>Book Flight</button>
-    </div>
-
-    <div class="flight-card">
-        <h3>✈️ SkyJet Airlines</h3>
-        <p>🕒 12:45 PM</p>
-        <p>💰 ₹6,200</p>
-        <button>Book Flight</button>
-    </div>
-
-    <div class="flight-card">
-        <h3>✈️ BlueWings</h3>
-        <p>🕒 06:15 PM</p>
-        <p>💰 ₹5,900</p>
-        <button>Book Flight</button>
-    </div>
+<div class="page-title">
+  <span class="eyebrow">Step 2 of 3</span>
+  <h1>✈️ Flight Booking</h1>
+  <p>Search real airports worldwide, then see live aircraft currently flying near your destination.</p>
 </div>
 
-    </form>
+<div class="search-card">
+  <div class="search-grid">
+    <div class="field">
+      <label for="fromInput">From</label>
+      <input type="text" id="fromInput" placeholder="Departure city or airport" autocomplete="off">
+      <div class="suggestions" id="fromSuggestions"></div>
+    </div>
+    <div class="field">
+      <label for="toInput">To</label>
+      <input type="text" id="toInput" placeholder="Destination city or airport" autocomplete="off">
+      <div class="suggestions" id="toSuggestions"></div>
+    </div>
+    <button class="swap-btn" id="swapBtn" title="Swap From/To">⇄</button>
+    <div class="field">
+      <label for="depDate">Departure</label>
+      <input type="date" id="depDate">
+    </div>
+    <button class="search-btn" id="searchBtn">Search Flights</button>
+  </div>
 </div>
+
+<div class="status-msg" id="statusMsg"></div>
+
+<div id="routeArea"></div>
+<div id="resultsArea"></div>
+<div class="booking-summary" id="bookingSummary"></div>
+
+<div class="note" id="apiNote"></div>
+
+<footer>© 2026 TravelGo · All Rights Reserved</footer>
+
+<script>
+/* ============================================================
+   TravelGo Flight Booking — real airport data + live aircraft
+   Airport data: OurAirports (static, filtered to airports with
+                 IATA codes + scheduled commercial service)
+   Live planes:  OpenSky Network /states/all (anonymous, free,
+                 bounding box around destination airport)
+   No payment / ticketing is actually processed. Live flight
+   *schedules* require a paid/keyed API everywhere — this page
+   shows real aircraft positions instead, not booked flights.
+   ============================================================ */
+
+const fromInput = document.getElementById('fromInput');
+const toInput = document.getElementById('toInput');
+const fromSuggestions = document.getElementById('fromSuggestions');
+const toSuggestions = document.getElementById('toSuggestions');
+const searchBtn = document.getElementById('searchBtn');
+const swapBtn = document.getElementById('swapBtn');
+const statusMsg = document.getElementById('statusMsg');
+const routeArea = document.getElementById('routeArea');
+const resultsArea = document.getElementById('resultsArea');
+const bookingSummary = document.getElementById('bookingSummary');
+const depDateInput = document.getElementById('depDate');
+
+let airportsData = [];
+let fromAirport = null;
+let toAirport = null;
+
+(function setDefaultDate(){
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  depDateInput.value = tomorrow.toISOString().split('T')[0];
+  depDateInput.min = today.toISOString().split('T')[0];
+})();
+
+async function loadAirports(){
+  try{
+    const res = await fetch('airports.json');
+    airportsData = await res.json();
+  } catch(err){
+    console.error('Failed to load airport data:', err);
+    showStatus('Could not load airport database. Make sure airports.json is in the same folder as this page.', true);
+  }
+}
+loadAirports();
+
+function setupAutocomplete(input, suggestionsBox, onPick){
+  let debounceTimer = null;
+  let activeIndex = -1;
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    onPick(null);
+    clearTimeout(debounceTimer);
+    if (q.length < 2){ closeBox(suggestionsBox); return; }
+    debounceTimer = setTimeout(() => renderMatches(q), 150);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    const items = suggestionsBox.querySelectorAll('.suggestion-item');
+    if (!items.length) return;
+    if (e.key === 'ArrowDown'){ e.preventDefault(); activeIndex = Math.min(activeIndex+1, items.length-1); highlight(items); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); activeIndex = Math.max(activeIndex-1, 0); highlight(items); }
+    else if (e.key === 'Enter'){ e.preventDefault(); if (activeIndex >= 0) items[activeIndex].click(); }
+  });
+
+  function highlight(items){
+    items.forEach(i => i.classList.remove('active'));
+    if (items[activeIndex]){ items[activeIndex].classList.add('active'); items[activeIndex].scrollIntoView({block:'nearest'}); }
+  }
+
+  function renderMatches(q){
+    activeIndex = -1;
+    const matches = airportsData.filter(a =>
+      a.name.toLowerCase().includes(q) ||
+      a.city.toLowerCase().includes(q) ||
+      a.iata.toLowerCase() === q
+    ).slice(0, 8);
+
+    if (!matches.length){ closeBox(suggestionsBox); return; }
+
+    suggestionsBox.innerHTML = matches.map((a, idx) => `
+      <div class="suggestion-item" data-idx="${idx}">
+        <span class="iata-tag">${a.iata}</span>${escapeHtml(a.name)}
+        <small>${escapeHtml(a.city)}, ${escapeHtml(a.country)}</small>
+      </div>
+    `).join('');
+    suggestionsBox.classList.add('open');
+
+    suggestionsBox.querySelectorAll('.suggestion-item').forEach((el, idx) => {
+      el.addEventListener('click', () => {
+        const a = matches[idx];
+        input.value = `${a.city} (${a.iata}) — ${a.name}`;
+        onPick(a);
+        closeBox(suggestionsBox);
+      });
+    });
+  }
+}
+
+function closeBox(box){ box.classList.remove('open'); box.innerHTML = ''; }
+
+setupAutocomplete(fromInput, fromSuggestions, (a) => { fromAirport = a; });
+setupAutocomplete(toInput, toSuggestions, (a) => { toAirport = a; });
+
+document.addEventListener('click', (e) => {
+  if (!fromSuggestions.contains(e.target) && e.target !== fromInput) closeBox(fromSuggestions);
+  if (!toSuggestions.contains(e.target) && e.target !== toInput) closeBox(toSuggestions);
+});
+
+swapBtn.addEventListener('click', () => {
+  [fromInput.value, toInput.value] = [toInput.value, fromInput.value];
+  [fromAirport, toAirport] = [toAirport, fromAirport];
+});
+
+searchBtn.addEventListener('click', async () => {
+  bookingSummary.classList.remove('open');
+  bookingSummary.innerHTML = '';
+
+  if (!fromAirport || !toAirport){
+    showStatus('Please pick both a departure and destination airport from the suggestion list.', true);
+    return;
+  }
+  if (fromAirport.iata === toAirport.iata){
+    showStatus('Departure and destination airports must be different.', true);
+    return;
+  }
+
+  showStatus(`Looking for real aircraft currently near ${toAirport.city} (${toAirport.iata})…`, false);
+  searchBtn.disabled = true;
+  searchBtn.textContent = 'Searching…';
+  renderRouteBanner();
+  renderSkeletons();
+
+  try {
+    const flights = await fetchNearbyAircraft(toAirport.lat, toAirport.lon);
+    renderResults(flights);
+  } catch(err){
+    console.error(err);
+    showStatus('Could not reach live flight tracking right now. OpenSky may be rate-limited — please try again shortly.', true);
+    resultsArea.innerHTML = '';
+  } finally {
+    searchBtn.disabled = false;
+    searchBtn.textContent = 'Search Flights';
+  }
+});
+
+function renderRouteBanner(){
+  const dist = haversineKm(fromAirport.lat, fromAirport.lon, toAirport.lat, toAirport.lon);
+  routeArea.innerHTML = `
+    <div class="route-banner">
+      <div class="card">
+        <div class="route">
+          ${fromAirport.iata} → ${toAirport.iata}
+          <small>${escapeHtml(fromAirport.city)} to ${escapeHtml(toAirport.city)} · ${depDateInput.value}</small>
+        </div>
+        <div class="dist">~${Math.round(dist).toLocaleString()} km great-circle distance</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSkeletons(){
+  resultsArea.innerHTML = `
+    <div class="results-header"><h2>Scanning live airspace…</h2></div>
+    <div class="flight-grid">${Array(6).fill('<div class="skeleton"></div>').join('')}</div>
+  `;
+}
+
+async function fetchNearbyAircraft(lat, lon, boxDeg = 1.0){
+  const lamin = lat - boxDeg, lamax = lat + boxDeg;
+  const lomin = lon - boxDeg, lomax = lon + boxDeg;
+  const url = `https://opensky-network.org/api/states/all?lamin=${lamin}&lomin=${lomin}&lamax=${lamax}&lomax=${lomax}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('OpenSky API error: ' + res.status);
+  const data = await res.json();
+
+  if (!data.states) return [];
+
+  return data.states
+    .filter(s => s[1] && s[1].trim())
+    .map(s => ({
+      callsign: s[1].trim(),
+      country: s[2],
+      lon: s[5],
+      lat: s[6],
+      altitudeM: s[7],
+      onGround: s[8],
+      velocityMs: s[9],
+      heading: s[10]
+    }))
+    .slice(0, 18);
+}
+
+function renderResults(flights){
+  if (!flights.length){
+    resultsArea.innerHTML = '';
+    document.getElementById('apiNote').insertAdjacentHTML('beforebegin', `
+      <div class="empty-state">
+        No aircraft are currently broadcasting position near ${escapeHtml(toAirport.city)} at this exact moment.
+        OpenSky only shows planes in the air right now, not scheduled future flights — try again in a few minutes,
+        or search a busier hub airport to see live traffic.
+      </div>
+    `);
+    showStatus(`Route set: ${fromAirport.iata} → ${toAirport.iata}. No live aircraft in range right now.`, false);
+    return;
+  }
+
+  showStatus(`Found ${flights.length} real aircraft currently flying near ${toAirport.city}, live from OpenSky Network.`, false);
+
+  resultsArea.innerHTML = `
+    <div class="results-header">
+      <h2>Live aircraft near ${escapeHtml(toAirport.city)}</h2>
+      <span>${flights.length} tracked right now</span>
+    </div>
+    <div class="flight-grid" id="flightGrid"></div>
+  `;
+
+  const grid = document.getElementById('flightGrid');
+  flights.forEach((f, idx) => {
+    const card = document.createElement('div');
+    card.className = 'flight-card';
+    const speedKmh = f.velocityMs ? Math.round(f.velocityMs * 3.6) : null;
+    const altKm = f.altitudeM ? (f.altitudeM / 1000).toFixed(1) : null;
+    card.innerHTML = `
+      <span class="badge">${f.onGround ? 'On ground' : 'In flight'}</span>
+      <h3>${escapeHtml(f.callsign)}</h3>
+      <div class="meta-row"><span>Origin country</span><b>${escapeHtml(f.country)}</b></div>
+      ${altKm ? `<div class="meta-row"><span>Altitude</span><b>${altKm} km</b></div>` : ''}
+      ${speedKmh ? `<div class="meta-row"><span>Ground speed</span><b>${speedKmh} km/h</b></div>` : ''}
+      <button class="select-btn" data-idx="${idx}">Select as my flight</button>
+    `;
+    grid.appendChild(card);
+
+    card.querySelector('.select-btn').addEventListener('click', () => {
+      grid.querySelectorAll('.flight-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      showBookingSummary(f);
+    });
+  });
+}
+
+function showBookingSummary(flight){
+  bookingSummary.innerHTML = `
+    <h2>Your Selection</h2>
+    <div class="row"><span>Callsign</span><span>${escapeHtml(flight.callsign)}</span></div>
+    <div class="row"><span>Route</span><span>${fromAirport.iata} → ${toAirport.iata}</span></div>
+    <div class="row"><span>Departure date</span><span>${depDateInput.value}</span></div>
+    <div class="row"><span>Origin country (aircraft)</span><span>${escapeHtml(flight.country)}</span></div>
+    <button class="confirm-btn" id="confirmBtn">Confirm Booking (Demo)</button>
+  `;
+  bookingSummary.classList.add('open');
+  bookingSummary.scrollIntoView({behavior:'smooth', block:'center'});
+
+  document.getElementById('confirmBtn').addEventListener('click', () => {
+    alert(`Demo booking confirmed for flight ${flight.callsign}.\nThis project does not process real payments or actual ticket reservations.`);
+  });
+}
+
+function haversineKm(lat1, lon1, lat2, lon2){
+  const R = 6371;
+  const dLat = (lat2-lat1) * Math.PI/180;
+  const dLon = (lon2-lon1) * Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function showStatus(msg, isError){
+  statusMsg.textContent = msg;
+  statusMsg.className = 'status-msg' + (isError ? ' error' : '');
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+document.getElementById('apiNote').textContent =
+  'Airport data: OurAirports public dataset (real airports with IATA codes and scheduled service). ' +
+  'Live aircraft: OpenSky Network /states/all — real planes broadcasting their position right now. ' +
+  'This is NOT a flight schedule lookup (no booked flight numbers/times) and no payment is processed.';
+</script>
 
 </body>
 </html>

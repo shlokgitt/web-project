@@ -4,29 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hotel Booking | TravelGo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0b2545;
-    --blue:#1e6fd9;
-    --blue-light:#eaf2fd;
-    --teal:#13a89e;
-    --ink:#16213a;
-    --muted:#6b7686;
-    --line:#e6e9f0;
-    --bg:#f7f9fc;
-    --white:#ffffff;
-    --radius:14px;
-    --shadow: 0 8px 24px rgba(16,38,73,0.08);
+    --ink:#0B1622;
+    --ink-raised:#142536;
+    --ink-line:#1F3850;
+    --terracotta:#C9542C;
+    --terracotta-bright:#E0673B;
+    --amber:#E8A33D;
+    --paper:#F4F1E8;
+    --slate:#8FA3B8;
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+    --radius:16px;
+    --shadow: 0 20px 50px rgba(0,0,0,0.45);
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
-    font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background:var(--bg);
-    color:var(--ink);
+    font-family:var(--font-body);
+    background:var(--ink);
+    color:var(--paper);
   }
+  h1,h2,h3{ font-family:var(--font-display); font-weight:600; }
+
   header{
-    background:var(--navy);
+    background:var(--ink-raised);
+    border-bottom:1px solid var(--ink-line);
     color:#fff;
     padding:18px 6%;
     display:flex;
@@ -35,38 +43,47 @@
     flex-wrap:wrap;
     gap:10px;
   }
-  header .logo{
-    font-size:1.4rem;
-    font-weight:700;
-    letter-spacing:0.5px;
-  }
+  header .logo{ font-size:1.4rem; font-weight:700; }
+  header .logo span{ color:var(--terracotta); }
   header nav a{
-    color:#cfe0f7;
+    color:var(--slate);
     text-decoration:none;
     margin-left:18px;
     font-size:0.95rem;
+    font-weight:500;
   }
-  header nav a:hover{ color:#fff; }
+  header nav a:hover{ color:var(--paper); }
 
   .page-title{
     max-width:1100px;
-    margin:36px auto 6px;
+    margin:40px auto 6px;
     padding:0 6%;
   }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--terracotta);
+    margin-bottom:10px;
+    display:block;
+  }
   .page-title h1{
-    margin:0 0 6px;
-    font-size:2rem;
+    margin:0 0 8px;
+    font-size:2.1rem;
+    color:#fff;
   }
   .page-title p{
     margin:0;
-    color:var(--muted);
+    color:var(--slate);
   }
 
   .search-card{
     max-width:1100px;
-    margin:24px auto;
-    padding:24px;
-    background:var(--white);
+    margin:28px auto;
+    padding:26px;
+    background:var(--ink-raised);
+    border:1px solid var(--ink-line);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
   }
@@ -86,46 +103,48 @@
     position:relative;
   }
   .field label{
-    font-size:0.78rem;
+    font-size:0.74rem;
     font-weight:600;
-    color:var(--muted);
+    color:var(--slate);
     text-transform:uppercase;
-    letter-spacing:0.4px;
+    letter-spacing:0.5px;
+    font-family:var(--font-mono);
   }
   .field input, .field select{
-    padding:11px 12px;
-    border:1px solid var(--line);
-    border-radius:10px;
+    padding:12px 13px;
+    border:1px solid var(--ink-line);
+    border-radius:9px;
     font-size:0.95rem;
     outline:none;
-    background:#fff;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--font-body);
   }
   .field input:focus, .field select:focus{
-    border-color:var(--blue);
-    box-shadow:0 0 0 3px var(--blue-light);
+    border-color:var(--terracotta);
   }
   .search-btn{
-    background:var(--teal);
+    background:var(--terracotta);
     color:#fff;
     border:none;
-    padding:12px 22px;
-    border-radius:10px;
+    padding:13px 24px;
+    border-radius:9px;
     font-size:0.95rem;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;
     white-space:nowrap;
+    transition:background 0.2s;
   }
-  .search-btn:hover{ background:#0f8d84; }
-  .search-btn:disabled{ background:#9fc9c5; cursor:not-allowed; }
+  .search-btn:hover{ background:var(--terracotta-bright); }
+  .search-btn:disabled{ background:#5a4034; cursor:not-allowed; }
 
-  /* autocomplete dropdown */
   .suggestions{
     position:absolute;
     top:100%;
     left:0;
     right:0;
-    background:#fff;
-    border:1px solid var(--line);
+    background:var(--ink-raised);
+    border:1px solid var(--ink-line);
     border-radius:10px;
     margin-top:4px;
     max-height:240px;
@@ -136,18 +155,19 @@
   }
   .suggestions.open{ display:block; }
   .suggestion-item{
-    padding:10px 12px;
+    padding:11px 13px;
     cursor:pointer;
     font-size:0.9rem;
-    border-bottom:1px solid var(--line);
+    border-bottom:1px solid var(--ink-line);
+    color:var(--paper);
   }
   .suggestion-item:last-child{ border-bottom:none; }
   .suggestion-item:hover, .suggestion-item.active{
-    background:var(--blue-light);
+    background:var(--ink);
   }
   .suggestion-item small{
     display:block;
-    color:var(--muted);
+    color:var(--slate);
     font-size:0.78rem;
   }
 
@@ -155,14 +175,14 @@
     max-width:1100px;
     margin:18px auto;
     padding:0 6%;
-    color:var(--muted);
+    color:var(--slate);
     font-size:0.95rem;
   }
-  .status-msg.error{ color:#c0392b; }
+  .status-msg.error{ color:var(--terracotta-bright); }
 
   .results-header{
     max-width:1100px;
-    margin:30px auto 14px;
+    margin:32px auto 16px;
     padding:0 6%;
     display:flex;
     justify-content:space-between;
@@ -172,11 +192,13 @@
   }
   .results-header h2{
     margin:0;
-    font-size:1.3rem;
+    font-size:1.4rem;
+    color:#fff;
   }
   .results-header span{
-    color:var(--muted);
-    font-size:0.9rem;
+    color:var(--slate);
+    font-size:0.88rem;
+    font-family:var(--font-mono);
   }
 
   .hotel-grid{
@@ -185,34 +207,41 @@
     padding:0 6%;
     display:grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap:18px;
+    gap:20px;
   }
   .hotel-card{
-    background:var(--white);
+    background:var(--ink-raised);
+    border:1px solid var(--ink-line);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
-    padding:18px;
+    padding:20px;
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:9px;
+    transition:transform 0.2s, border-color 0.2s;
   }
+  .hotel-card:hover{ transform:translateY(-3px); }
   .hotel-card .badge{
     align-self:flex-start;
-    background:var(--blue-light);
-    color:var(--blue);
-    font-size:0.72rem;
+    background:rgba(201,84,44,0.15);
+    color:var(--amber);
+    font-size:0.7rem;
     font-weight:700;
-    padding:3px 9px;
+    padding:4px 10px;
     border-radius:20px;
     text-transform:uppercase;
     letter-spacing:0.4px;
+    font-family:var(--font-mono);
   }
   .hotel-card h3{
     margin:4px 0 0;
-    font-size:1.08rem;
+    font-size:1.1rem;
+    color:#fff;
+    font-family:var(--font-body);
+    font-weight:700;
   }
   .hotel-card .addr{
-    color:var(--muted);
+    color:var(--slate);
     font-size:0.88rem;
     line-height:1.4;
   }
@@ -220,28 +249,30 @@
     display:flex;
     gap:14px;
     font-size:0.82rem;
-    color:var(--muted);
+    color:var(--slate);
     margin-top:4px;
+    font-family:var(--font-mono);
   }
   .hotel-card .select-btn{
     margin-top:10px;
-    background:var(--blue);
-    color:#fff;
-    border:none;
-    padding:9px 14px;
+    background:transparent;
+    border:1px solid var(--terracotta);
+    color:var(--terracotta-bright);
+    padding:10px 16px;
     border-radius:8px;
     font-size:0.88rem;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;
     align-self:flex-start;
+    transition:background 0.2s, color 0.2s;
   }
-  .hotel-card .select-btn:hover{ background:#1859ab; }
+  .hotel-card .select-btn:hover{ background:var(--terracotta); color:#fff; }
   .hotel-card.selected{
-    outline:2px solid var(--teal);
+    outline:2px solid var(--terracotta);
   }
 
   .skeleton{
-    background:linear-gradient(90deg,#eef1f6 25%,#f7f9fc 37%,#eef1f6 63%);
+    background:linear-gradient(90deg, var(--ink-raised) 25%, var(--ink-line) 37%, var(--ink-raised) 63%);
     background-size:400% 100%;
     animation:shimmer 1.4s infinite;
     border-radius:var(--radius);
@@ -255,56 +286,62 @@
   .booking-summary{
     max-width:560px;
     margin:0 auto 70px;
-    padding:24px;
-    background:var(--white);
+    padding:28px;
+    background:var(--ink-raised);
+    border:1px solid var(--ink-line);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
     display:none;
   }
   .booking-summary.open{ display:block; }
-  .booking-summary h2{ margin-top:0; font-size:1.2rem; }
+  .booking-summary h2{ margin-top:0; font-size:1.3rem; color:#fff; }
   .booking-summary .row{
     display:flex;
     justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px solid var(--line);
+    padding:10px 0;
+    border-bottom:1px dashed var(--ink-line);
     font-size:0.92rem;
   }
   .booking-summary .row:last-of-type{ border-bottom:none; }
-  .booking-summary .row span:first-child{ color:var(--muted); }
+  .booking-summary .row span:first-child{ color:var(--slate); }
+  .booking-summary .row span:last-child{ font-family:var(--font-mono); color:var(--paper); }
   .confirm-btn{
-    margin-top:16px;
+    margin-top:18px;
     width:100%;
-    background:var(--teal);
+    background:var(--terracotta);
     color:#fff;
     border:none;
-    padding:13px;
+    padding:14px;
     border-radius:10px;
     font-size:0.98rem;
     font-weight:700;
     cursor:pointer;
+    transition:background 0.2s;
   }
-  .confirm-btn:hover{ background:#0f8d84; }
+  .confirm-btn:hover{ background:var(--terracotta-bright); }
   .note{
     max-width:1100px;
     margin:0 auto 30px;
     padding:0 6%;
     font-size:0.8rem;
-    color:var(--muted);
+    color:var(--slate);
+    font-family:var(--font-mono);
   }
   footer{
     text-align:center;
     padding:22px;
-    color:var(--muted);
+    color:var(--slate);
     font-size:0.85rem;
-    border-top:1px solid var(--line);
+    border-top:1px solid var(--ink-line);
+    background:var(--ink-raised);
+    font-family:var(--font-mono);
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">TravelGo</div>
+  <div class="logo">Travel<span>Go</span></div>
   <nav>
     <a href="index.html">Home</a>
     <a href="bookingchoice.html">Booking</a>
@@ -313,6 +350,7 @@
 </header>
 
 <div class="page-title">
+  <span class="eyebrow">Step 2 of 3</span>
   <h1>🏨 Hotel Booking</h1>
   <p>Search any city in the world and see real hotels pulled live from OpenStreetMap.</p>
 </div>
@@ -354,7 +392,7 @@
 
 <div class="note" id="apiNote"></div>
 
-<footer>© 2026 TravelGo | All Rights Reserved</footer>
+<footer>© 2026 TravelGo · All Rights Reserved</footer>
 
 <script>
 /* ============================================================
@@ -516,7 +554,6 @@ function renderSkeletons(){
 }
 
 async function fetchHotelsNearCity(lat, lon, radiusMeters = 6000){
-  // Overpass QL: find nodes/ways tagged tourism=hotel within radius of the city center
   const query = `
     [out:json][timeout:25];
     (
@@ -534,7 +571,7 @@ async function fetchHotelsNearCity(lat, lon, radiusMeters = 6000){
     .map(el => {
       const tags = el.tags || {};
       const name = tags.name;
-      if (!name) return null; // skip unnamed entries, not useful to show
+      if (!name) return null;
       const addrParts = [tags['addr:housenumber'], tags['addr:street'], tags['addr:suburb'], tags['addr:city']]
         .filter(Boolean);
       return {
@@ -549,7 +586,6 @@ async function fetchHotelsNearCity(lat, lon, radiusMeters = 6000){
     })
     .filter(Boolean);
 
-  // de-duplicate by name+address
   const seen = new Set();
   const unique = [];
   for (const h of hotels){
@@ -615,7 +651,7 @@ function showBookingSummary(hotel){
   bookingSummary.scrollIntoView({behavior:'smooth', block:'center'});
 
   document.getElementById('confirmBtn').addEventListener('click', () => {
-    alert(`Demo booking confirmed for ${hotel.name}.`);
+    alert(`Demo booking confirmed for ${hotel.name}.\nThis project does not process real payments or reservations.`);
   });
 }
 

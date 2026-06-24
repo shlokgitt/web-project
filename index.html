@@ -4,301 +4,461 @@
 <meta charset="UTF-8">
 <title>TravelGo | Book Your Journey</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
+/* ============================================================
+   TRAVELGO DESIGN SYSTEM
+   Ink navy + terracotta, boarding-pass signature motif
+   ============================================================ */
+:root{
+  --ink:        #0B1622;
+  --ink-raised: #142536;
+  --ink-line:   #1F3850;
+  --terracotta: #C9542C;
+  --terracotta-bright: #E0673B;
+  --amber:      #E8A33D;
+  --paper:      #F4F1E8;
+  --slate:      #8FA3B8;
+  --pine:       #2F6F5E;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius: 16px;
+  --shadow-deep: 0 20px 50px rgba(0,0,0,0.45);
 }
+
+*{ margin:0; padding:0; box-sizing:border-box; }
 
 body{
-    
-    background:#1a1a2e;
-    color:#eee;
-      
+  font-family:var(--font-body);
+  background:var(--ink);
+  color:var(--paper);
+  line-height:1.6;
 }
 
-/* Header */
+h1,h2,h3{ font-family:var(--font-display); font-weight:600; letter-spacing:-0.01em; }
+
+a{ color:inherit; }
+
+/* ---------- Header ---------- */
 header{
-    background:#1e3799;
-    color:white;
-    padding:15px 40px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+  background:var(--ink-raised);
+  border-bottom:1px solid var(--ink-line);
+  padding:18px 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 
 header h1{
-    font-size:26px;
+  font-size:1.6rem;
+  color:var(--paper);
 }
+header h1 span{ color:var(--terracotta); }
+
+nav{ display:flex; align-items:center; gap:28px; }
 
 nav a{
-    color:white;
-    margin-left:20px;
-    text-decoration:none;
-    font-weight:bold;
+  text-decoration:none;
+  font-size:0.92rem;
+  font-weight:500;
+  color:var(--slate);
+  transition:color 0.2s;
+}
+nav a:hover{ color:var(--paper); }
+
+nav a.cta{
+  background:var(--terracotta);
+  color:#fff;
+  padding:9px 18px;
+  border-radius:8px;
+  font-weight:600;
+}
+nav a.cta:hover{ background:var(--terracotta-bright); color:#fff; }
+
+/* ---------- Hero ---------- */
+.hero{
+  min-height:78vh;
+  background:
+    linear-gradient(180deg, rgba(11,22,34,0.25) 0%, rgba(11,22,34,0.55) 60%, rgba(11,22,34,0.88) 100%),
+    url("https://plus.unsplash.com/premium_photo-1754269248502-2d0531ab9234?fm=jpg&q=60&w=3000") center/cover;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:0 20px;
 }
 
-/* Hero Section */
-.hero{
-    height:70vh;
-    background:url("https://plus.unsplash.com/premium_photo-1754269248502-2d0531ab9234?fm=jpg&q=60&w=3000") center/cover;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+.hero .eyebrow{
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--amber);
+  margin-bottom:18px;
 }
 
 .hero h2{
-    font-size:42px;
+  font-size:clamp(2.4rem, 6vw, 4.2rem);
+  color:#fff;
+  max-width:800px;
+  line-height:1.1;
 }
 
 .hero p{
-    font-size:18px;
-    margin:10px 0;
+  font-size:1.05rem;
+  color:var(--slate);
+  margin:18px 0 32px;
+  font-family:var(--font-mono);
+  letter-spacing:0.04em;
 }
 
-.hero button{
-    padding:12px 30px;
-    border:none;
-    background:#ff9f1a;
-    color:black;
-    font-size:16px;
-    border-radius:5px;
-    cursor:pointer;
+.btn-primary{
+  display:inline-block;
+  padding:15px 36px;
+  border:none;
+  background:var(--terracotta);
+  color:#fff;
+  font-size:1rem;
+  font-weight:700;
+  border-radius:10px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background 0.2s, transform 0.2s;
+}
+.btn-primary:hover{ background:var(--terracotta-bright); transform:translateY(-2px); }
+
+/* ---------- Boarding-pass card (signature element) ---------- */
+.pass-card{
+  background:var(--ink-raised);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow-deep);
+  position:relative;
+  transition:transform 0.25s, box-shadow 0.25s;
+}
+.pass-card:hover{ transform:translateY(-6px); }
+
+.pass-card img{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  display:block;
 }
 
-/* Destinations */
-.destinations{
-    padding:60px 40px;
-    background:#0f3460;
+.pass-card .perforation{
+  position:relative;
+  height:0;
+  border-top:2px dashed var(--ink-line);
+  margin:0 18px;
+}
+.pass-card .perforation::before,
+.pass-card .perforation::after{
+  content:'';
+  position:absolute;
+  top:-9px;
+  width:18px;
+  height:18px;
+  background:var(--ink);
+  border-radius:50%;
+}
+.pass-card .perforation::before{ left:-27px; }
+.pass-card .perforation::after{ right:-27px; }
+
+.pass-card .pass-body{ padding:20px 22px 24px; }
+
+.pass-card h3{
+  font-size:1.25rem;
+  color:#fff;
+  margin-bottom:4px;
 }
 
-.destinations h2{
-    text-align:center;
-    margin-bottom:40px;
-    color:#fff;
+.pass-card .price{
+  font-family:var(--font-mono);
+  color:var(--amber);
+  font-size:0.95rem;
+  font-weight:700;
 }
 
-.card{
-    background:#16213e;
-    width:280px;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
+/* ---------- Section scaffolding ---------- */
+section{ padding:80px 6%; }
 
-.card h3{
-    padding:15px;
-    color:#fff;
+.section-head{
+  text-align:center;
+  max-width:640px;
+  margin:0 auto 50px;
 }
+.section-head .eyebrow{
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--terracotta);
+  margin-bottom:10px;
+  display:block;
+}
+.section-head h2{
+  font-size:clamp(1.8rem, 3vw, 2.4rem);
+  color:#fff;
+  margin-bottom:12px;
+}
+.section-head p{ color:var(--slate); font-size:1rem; }
 
-.card p{
-    padding:0 15px 20px;
-    color:#bbb;
-}
-
-/* Blog Section */
-.blog-section{
-    padding:60px 10%;
-    background:#1a1a2e;
-}
-
-.blog-section h2{
-    text-align:center;
-    margin-bottom:40px;
-    color:#fff;
-}
-
-.blog-card{
-    background:#16213e;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 4px 10px rgba(0,0,0,0.3);
-}
-
-.blog-card h3{
-    padding:15px;
-    color:#fff;
-}
-
-.blog-card p{
-    padding:0 15px 15px;
-    color:#bbb;
-}
-
-.blog-card a{
-    display:block;
-    padding:15px;
-    text-decoration:none;
-    color:#1d976c;
-    font-weight:bold;
-}
-
-/* Tips */
-    .tips-section{
-    background:#0f3460;
-    padding:60px 10%;
-}
-
-.tips-section h2{
-    text-align:center;
-    margin-bottom:40px;
-    color:#fff;
-}
-
-.tip-card{
-    background:#16213e;
-    padding:25px;
-    border-radius:10px;
-    text-align:center;
-    color:#eee;
-}
-
-.tip-card h3{
-    color:#fff;
-}
-
-/* Filter Destinations */
-.grid-destinations{
-    padding:0 10% 60px;
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap:30px;
-    background:#1a1a2e;
-}
-/* Popup */
-
-  .popup-content{
-    background:#16213e;
-    max-width:500px;
-    width:90%;
-    padding:25px;
-    border-radius:12px;
-    text-align:center;
-    position:relative;
-    color:#eee;
-}
-
-.popup-content h2{
-    color:#fff;
-}
-
-/* Footer */
-footer{
-    background:#16213e;
-    color:white;
-    text-align:center;
-    padding:15px;
-}
-   
+/* ---------- Destinations ---------- */
+.destinations{ background:var(--ink); }
 .cards{
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:36px;
+  max-width:1100px;
+  margin:0 auto;
 }
 
-.card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-}
-
+/* ---------- Blog ---------- */
+.blog-section{ background:var(--ink-raised); }
 .blog-container{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:30px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.blog-card{
+  background:var(--ink);
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid var(--ink-line);
+  transition:transform 0.25s;
+}
+.blog-card:hover{ transform:translateY(-4px); }
+.blog-card img{ width:100%; height:180px; object-fit:cover; }
+.blog-card .blog-body{ padding:20px 22px; }
+.blog-card h3{ font-size:1.1rem; color:#fff; margin-bottom:8px; }
+.blog-card p{ color:var(--slate); font-size:0.92rem; margin-bottom:14px; }
+.blog-card a{
+  font-family:var(--font-mono);
+  font-size:0.85rem;
+  color:var(--amber);
+  text-decoration:none;
+  font-weight:700;
+}
+.blog-card a:hover{ color:var(--terracotta-bright); }
+
+/* ---------- Trending (now matches the rest, no purple gradient) ---------- */
+.trending{ background:var(--ink); }
+.trending-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:30px;
+  max-width:1200px;
+  margin:0 auto 40px;
+}
+.trending-card{ cursor:pointer; }
+.trending-card .pass-body{ position:relative; }
+.trending-tag{
+  position:absolute;
+  top:14px; left:14px;
+  background:rgba(11,22,34,0.85);
+  border:1px solid var(--terracotta);
+  color:var(--amber);
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  font-weight:700;
+  padding:5px 12px;
+  border-radius:20px;
+  z-index:2;
+}
+.trending-card .country{
+  font-family:var(--font-mono);
+  font-size:0.82rem;
+  color:var(--terracotta);
+  margin-bottom:10px;
+}
+.trending-card .desc{ color:var(--slate); font-size:0.9rem; margin-bottom:16px; }
+.trending-card .learn-more{
+  background:none;
+  border:1px solid var(--ink-line);
+  color:var(--paper);
+  padding:9px 16px;
+  border-radius:20px;
+  font-size:0.85rem;
+  cursor:pointer;
+  font-family:var(--font-body);
+}
+.trending-card .learn-more:hover{ border-color:var(--terracotta); color:var(--terracotta-bright); }
+
+.data-credit{
+  text-align:center;
+  max-width:1200px;
+  margin:0 auto;
+  padding:18px;
+  background:var(--ink-raised);
+  border-radius:12px;
+  color:var(--slate);
+  font-family:var(--font-mono);
+  font-size:0.82rem;
 }
 
-.blog-card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-}
-
+/* ---------- Tips ---------- */
+.tips-section{ background:var(--ink-raised); }
 .tips-container{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap:25px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:24px;
+  max-width:1100px;
+  margin:0 auto;
 }
+.tip-card{
+  background:var(--ink);
+  border:1px solid var(--ink-line);
+  padding:28px 22px;
+  border-radius:var(--radius);
+  text-align:center;
+}
+.tip-card h3{ font-size:1.05rem; color:#fff; margin-bottom:8px; }
+.tip-card p{ color:var(--slate); font-size:0.9rem; }
 
+/* ---------- Filter / Explore ---------- */
 .filters{
-    text-align:center;
-    margin:40px 0;
-    padding:20px;
-    background:#1a1a2e;
+  text-align:center;
+  margin-bottom:40px;
 }
-
 .filters button{
-    padding:10px 18px;
-    margin:5px;
-    border:none;
-    border-radius:20px;
-    background:#1d976c;
-    color:white;
-    cursor:pointer;
+  padding:10px 22px;
+  margin:5px;
+  border:1px solid var(--ink-line);
+  border-radius:24px;
+  background:transparent;
+  color:var(--slate);
+  cursor:pointer;
+  font-family:var(--font-body);
+  font-weight:500;
+  transition:all 0.2s;
+}
+.filters button:hover, .filters button.active{
+  background:var(--terracotta);
+  border-color:var(--terracotta);
+  color:#fff;
 }
 
-.filters button:hover{
-    background:#14845c;
+.grid-destinations{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:30px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.grid-destinations .pass-card .pass-body p{ color:var(--slate); font-size:0.9rem; margin-bottom:16px; }
+.grid-destinations .pass-card button{
+  padding:10px 22px;
+  background:transparent;
+  border:1px solid var(--terracotta);
+  color:var(--terracotta-bright);
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-family:var(--font-body);
+}
+.grid-destinations .pass-card button:hover{ background:var(--terracotta); color:#fff; }
+
+/* ---------- Popups ---------- */
+.popup, .trending-popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(5,10,16,0.78);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+  padding:20px;
 }
 
-.grid-destinations .card{
-    width:100%;
-    transition: transform 0.3s;
+.popup-content{
+  background:var(--ink-raised);
+  max-width:480px;
+  width:100%;
+  padding:0;
+  border-radius:var(--radius);
+  text-align:left;
+  position:relative;
+  color:var(--paper);
+  overflow:hidden;
+  box-shadow:var(--shadow-deep);
 }
-
-.grid-destinations .card:hover{
-    transform: translateY(-8px);
-}
-
-.grid-destinations .card button{
-    padding:10px 20px;
-    margin:15px;
-    background:#1d976c;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.popup{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.6);
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-}
-
-.popup-content img{
-    width:100%;
-    border-radius:10px;
-    margin-bottom:15px;
-}
+.popup-content img{ width:100%; height:220px; object-fit:cover; }
+.popup-content .popup-inner{ padding:26px; }
+.popup-content h2{ color:#fff; font-size:1.4rem; margin-bottom:10px; }
+.popup-content p{ color:var(--slate); font-size:0.95rem; }
 
 .close{
-    position:absolute;
-    top:10px;
-    right:15px;
-    font-size:26px;
-    cursor:pointer;
-    color:#fff;
+  position:absolute;
+  top:14px; right:18px;
+  font-size:24px;
+  cursor:pointer;
+  color:#fff;
+  background:rgba(11,22,34,0.6);
+  width:34px; height:34px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  z-index:10;
 }
-/* Responsive */
+.close:hover{ background:var(--terracotta); }
+
+.trending-popup-content{
+  background:var(--ink-raised);
+  max-width:600px;
+  width:100%;
+  border-radius:var(--radius);
+  position:relative;
+  max-height:88vh;
+  overflow-y:auto;
+  box-shadow:var(--shadow-deep);
+}
+.trending-popup-content img{ width:100%; height:240px; object-fit:cover; }
+.trending-popup-content .tp-body{ padding:30px; }
+.trending-popup-content h2{ font-size:1.8rem; color:#fff; margin-bottom:4px; }
+.trending-popup-content .tp-country{
+  font-family:var(--font-mono);
+  color:var(--terracotta-bright);
+  font-weight:700;
+  margin-bottom:24px;
+}
+.tp-section h3{
+  font-size:1.05rem; color:#fff; margin-bottom:14px;
+  display:flex; align-items:center; gap:10px; font-family:var(--font-body); font-weight:700;
+}
+.tp-section ul{ list-style:none; padding:0; margin-bottom:24px; }
+.tp-section li{
+  padding:9px 0; border-bottom:1px solid var(--ink-line);
+  color:var(--paper); font-size:0.92rem;
+  display:flex; align-items:center; gap:10px;
+}
+
+/* ---------- Footer ---------- */
+footer{
+  background:var(--ink-raised);
+  border-top:1px solid var(--ink-line);
+  color:var(--slate);
+  text-align:center;
+  padding:24px;
+  font-size:0.85rem;
+  font-family:var(--font-mono);
+}
+
+/* ---------- Responsive ---------- */
 @media(max-width:768px){
-    .hero h2{
-        font-size:32px;
-    }
-    nav{
-        display:none;
-    }
+  .hero h2{ font-size:2.2rem; }
+  nav{ display:none; }
+  section{ padding:60px 6%; }
 }
 </style>
 </head>
@@ -306,7 +466,7 @@ footer{
 <body>
 
 <header>
-    <h1>TravelGo</h1>
+    <h1>Travel<span>Go</span></h1>
     <nav>
         <a href="#home">Home</a>
         <a href="#destinations">Destinations</a>
@@ -314,160 +474,177 @@ footer{
         <a href="#trending">2025 Trending</a>
         <a href="#filter">Explore</a>
         <a href="contactpage.html">Contact</a>
-      
+        <a href="bookingchoice.html" class="cta">Book Now</a>
     </nav>
 </header>
 
 <!-- HERO -->
 <section id="home" class="hero">
+    <span class="eyebrow">Boarding Pass to Anywhere</span>
     <h2>Discover the World</h2>
-    <p>Flights • Hotels • Holiday Packages</p>
-    <a href="bookingchoice.html" target="_blank">
-        <button type="button">Book Now</button>
-    </a>
+    <p>FLIGHTS &nbsp;·&nbsp; HOTELS &nbsp;·&nbsp; HOLIDAY PACKAGES</p>
+    <a href="bookingchoice.html"><button type="button" class="btn-primary">Book Now</button></a>
 </section>
 
 <!-- POPULAR DESTINATIONS -->
 <section id="destinations" class="destinations">
-    <h2>Popular Destinations</h2>
+    <div class="section-head">
+        <span class="eyebrow">Popular Routes</span>
+        <h2>Popular Destinations</h2>
+        <p>Hand-picked getaways our travelers book most.</p>
+    </div>
     <div class="cards">
-        <div class="card">
-            <img src="https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_2560%2Cc_limit/GettyImages-468366251.jpg">
-            <h3>Paris</h3>
-            <p>Starting from ₹45,000</p>
+        <div class="pass-card">
+            <img src="https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_2560%2Cc_limit/GettyImages-468366251.jpg" alt="Paris">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Paris</h3>
+                <p class="price">FROM ₹45,000</p>
+            </div>
         </div>
 
-        <div class="card">
-            <img src="https://cdn.britannica.com/15/189715-050-4310222B/Dubai-United-Arab-Emirates-Burj-Khalifa-top.jpg">
-            <h3>Dubai</h3>
-            <p>Starting from ₹38,000</p>
+        <div class="pass-card">
+            <img src="https://cdn.britannica.com/15/189715-050-4310222B/Dubai-United-Arab-Emirates-Burj-Khalifa-top.jpg" alt="Dubai">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Dubai</h3>
+                <p class="price">FROM ₹38,000</p>
+            </div>
         </div>
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-            <h3>Maldives</h3>
-            <p>Starting from ₹60,000</p>
+        <div class="pass-card">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Maldives">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Maldives</h3>
+                <p class="price">FROM ₹60,000</p>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- BLOG -->
 <section id="blog" class="blog-section">
-    <h2>Latest Blog Posts</h2>
+    <div class="section-head">
+        <span class="eyebrow">From the Journal</span>
+        <h2>Latest Blog Posts</h2>
+        <p>Stories and guides to help you plan smarter.</p>
+    </div>
     <div class="blog-container">
         <article class="blog-card">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-            <h3>Top 10 Beach Destinations in 2026</h3>
-            <p>Discover the most breathtaking beaches to relax and unwind.</p>
-            <a href="#">Read More →</a>
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Beach destinations">
+            <div class="blog-body">
+                <h3>Top 10 Beach Destinations in 2026</h3>
+                <p>Discover the most breathtaking beaches to relax and unwind.</p>
+                <a href="#">Read More →</a>
+            </div>
         </article>
 
         <article class="blog-card">
-            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000">
-            <h3>Best Cities for Solo Travelers</h3>
-            <p>Safe, exciting, and budget-friendly cities for solo trips.</p>
-            <a href="#">Read More →</a>
+            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000" alt="Solo travel cities">
+            <div class="blog-body">
+                <h3>Best Cities for Solo Travelers</h3>
+                <p>Safe, exciting, and budget-friendly cities for solo trips.</p>
+                <a href="#">Read More →</a>
+            </div>
         </article>
 
         <article class="blog-card">
-            <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b">
-            <h3>Mountain Adventures</h3>
-            <p>Explore the world’s top mountain escapes.</p>
-            <a href="#">Read More →</a>
+            <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b" alt="Mountain adventures">
+            <div class="blog-body">
+                <h3>Mountain Adventures</h3>
+                <p>Explore the world's top mountain escapes.</p>
+                <a href="#">Read More →</a>
+            </div>
         </article>
     </div>
 </section>
 
 <!-- MOST TRAVELLED 2025 -->
-<section id="trending" style="padding:80px 20px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-    <div style="max-width:1200px; margin:0 auto;">
-        <div style="text-align:center; margin-bottom:60px;">
-            <h2 style="font-size:2.5rem; color:#fff; margin-bottom:15px; font-weight:600;">🌍 Most Travelled Destinations of 2025</h2>
-            <p style="font-size:1.1rem; color:rgba(255, 255, 255, 0.9); max-width:600px; margin:0 auto;">Discover where the world traveled this year - from cultural capitals to trending hotspots</p>
-        </div>
+<section id="trending" class="trending">
+    <div class="section-head">
+        <span class="eyebrow">Annual Report</span>
+        <h2>Most Travelled Destinations of 2025</h2>
+        <p>Where the world traveled this year — from cultural capitals to trending hotspots.</p>
+    </div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:30px; margin-bottom:40px;">
-            <!-- Barcelona -->
-            <div style="background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; cursor:pointer; transition:transform 0.3s;" onclick="openTrendingPopup('Barcelona', 'Spain', 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800', 'Sagrada Familia, Park Güell, Gothic Quarter, La Rambla, Camp Nou Stadium', 'Gaudí architecture, tapas and paella, FC Barcelona, Mediterranean beaches, vibrant nightlife')">
-                <span style="position:absolute; top:15px; left:15px; background:rgba(255, 255, 255, 0.95); color:#667eea; font-weight:bold; padding:8px 15px; border-radius:20px; font-size:0.9rem; box-shadow:0 4px 15px rgba(0,0,0,0.2);">#1 Most Booked</span>
-                <img src="https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding:25px;">
-                    <h3 style="font-size:1.5rem; font-weight:600; margin-bottom:10px;">Barcelona</h3>
-                    <p style="font-size:0.95rem; color:#666; margin-bottom:15px;">Spain</p>
-                    <p style="font-size:0.9rem; color:#555; line-height:1.6;">Topped global bookings with its perfect blend of Gaudí architecture, Mediterranean beaches, and vibrant culture.</p>
-                    <button style="margin-top:15px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:20px; cursor:pointer;">Learn More →</button>
-                </div>
-            </div>
-
-            <!-- Paris -->
-            <div style="background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; cursor:pointer; transition:transform 0.3s;" onclick="openTrendingPopup('Paris', 'France', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800', 'Eiffel Tower, Louvre Museum, Notre-Dame Cathedral, Arc de Triomphe, Versailles Palace', 'Romance and art, croissants and wine, fashion capital, Seine River cruises, café culture')">
-                <span style="position:absolute; top:15px; left:15px; background:rgba(255, 255, 255, 0.95); color:#667eea; font-weight:bold; padding:8px 15px; border-radius:20px; font-size:0.9rem; box-shadow:0 4px 15px rgba(0,0,0,0.2);">#1 Arrivals</span>
-                <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding:25px;">
-                    <h3 style="font-size:1.5rem; font-weight:600; margin-bottom:10px;">Paris</h3>
-                    <p style="font-size:0.95rem; color:#666; margin-bottom:15px;">France</p>
-                    <p style="font-size:0.9rem; color:#555; line-height:1.6;">Maintained its crown with 18M+ visitors, enhanced by Notre Dame's reopening.</p>
-                    <button style="margin-top:15px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:20px; cursor:pointer;">Learn More →</button>
-                </div>
-            </div>
-
-            <!-- London -->
-            <div style="background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; cursor:pointer; transition:transform 0.3s;" onclick="openTrendingPopup('London', 'United Kingdom', 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800', 'Big Ben, Tower Bridge, Buckingham Palace, British Museum, London Eye', 'Royal heritage, West End theatre, afternoon tea, red double-decker buses, diverse food scene')">
-                <span style="position:absolute; top:15px; left:15px; background:rgba(255, 255, 255, 0.95); color:#667eea; font-weight:bold; padding:8px 15px; border-radius:20px; font-size:0.9rem; box-shadow:0 4px 15px rgba(0,0,0,0.2);">#1 Searched</span>
-                <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding:25px;">
-                    <h3 style="font-size:1.5rem; font-weight:600; margin-bottom:10px;">London</h3>
-                    <p style="font-size:0.95rem; color:#666; margin-bottom:15px;">United Kingdom</p>
-                    <p style="font-size:0.9rem; color:#555; line-height:1.6;">The most searched-for destination globally, blending royal heritage with cutting-edge entertainment.</p>
-                    <button style="margin-top:15px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:20px; cursor:pointer;">Learn More →</button>
-                </div>
-            </div>
-
-            <!-- Tokyo -->
-            <div style="background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; cursor:pointer; transition:transform 0.3s;" onclick="openTrendingPopup('Tokyo', 'Japan', 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800', 'Senso-ji Temple, Tokyo Skytree, Shibuya Crossing, Meiji Shrine, Tsukiji Fish Market', 'Sushi and ramen, cherry blossoms, anime culture, cutting-edge technology, ancient temples')">
-                <span style="position:absolute; top:15px; left:15px; background:rgba(255, 255, 255, 0.95); color:#667eea; font-weight:bold; padding:8px 15px; border-radius:20px; font-size:0.9rem; box-shadow:0 4px 15px rgba(0,0,0,0.2);">#2 Global</span>
-                <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding:25px;">
-                    <h3 style="font-size:1.5rem; font-weight:600; margin-bottom:10px;">Tokyo</h3>
-                    <p style="font-size:0.95rem; color:#666; margin-bottom:15px;">Japan</p>
-                    <p style="font-size:0.9rem; color:#555; line-height:1.6;">Captivated travelers with its seamless fusion of ancient temples and futuristic technology.</p>
-                    <button style="margin-top:15px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:20px; cursor:pointer;">Learn More →</button>
-                </div>
-            </div>
-
-            <!-- Osaka -->
-            <div style="background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; cursor:pointer; transition:transform 0.3s;" onclick="openTrendingPopup('Osaka', 'Japan', 'https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800', 'Osaka Castle, Dotonbori District, Universal Studios Japan, Osaka Aquarium, Sumiyoshi Taisha Shrine', 'Street food paradise, takoyaki and okonomiyaki, vibrant nightlife, shopping districts, comedy culture')">
-                <span style="position:absolute; top:15px; left:15px; background:rgba(255, 255, 255, 0.95); color:#667eea; font-weight:bold; padding:8px 15px; border-radius:20px; font-size:0.9rem; box-shadow:0 4px 15px rgba(0,0,0,0.2);">#1 Trending</span>
-                <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding:25px;">
-                    <h3 style="font-size:1.5rem; font-weight:600; margin-bottom:10px;">Osaka</h3>
-                    <p style="font-size:0.95rem; color:#666; margin-bottom:15px;">Japan</p>
-                    <p style="font-size:0.9rem; color:#555; line-height:1.6;">Named the world's fastest-growing destination with incredible food and nightlife.</p>
-                    <button style="margin-top:15px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:20px; cursor:pointer;">Learn More →</button>
-                </div>
-            </div>
-
-            <!-- Bangkok -->
-            <div style="background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; cursor:pointer; transition:transform 0.3s;" onclick="openTrendingPopup('Bangkok', 'Thailand', 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800', 'Grand Palace, Wat Arun, Wat Pho, Chatuchak Market, Khao San Road', 'Street food heaven, ornate temples, floating markets, Thai massage, vibrant nightlife and shopping')">
-                <span style="position:absolute; top:15px; left:15px; background:rgba(255, 255, 255, 0.95); color:#667eea; font-weight:bold; padding:8px 15px; border-radius:20px; font-size:0.9rem; box-shadow:0 4px 15px rgba(0,0,0,0.2);">30M+ Visitors</span>
-                <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding:25px;">
-                    <h3 style="font-size:1.5rem; font-weight:600; margin-bottom:10px;">Bangkok</h3>
-                    <p style="font-size:0.95rem; color:#666; margin-bottom:15px;">Thailand</p>
-                    <p style="font-size:0.9rem; color:#555; line-height:1.6;">Led Asia with 30.3M arrivals, offering temples, street food, and vibrant nightlife.</p>
-                    <button style="margin-top:15px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:20px; cursor:pointer;">Learn More →</button>
-                </div>
+    <div class="trending-grid">
+        <div class="pass-card trending-card" onclick="openTrendingPopup('Barcelona', 'Spain', 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800', 'Sagrada Familia, Park Güell, Gothic Quarter, La Rambla, Camp Nou Stadium', 'Gaudí architecture, tapas and paella, FC Barcelona, Mediterranean beaches, vibrant nightlife')">
+            <span class="trending-tag">#1 Most Booked</span>
+            <img src="https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800" alt="Barcelona">
+            <div class="pass-body">
+                <h3>Barcelona</h3>
+                <p class="country">SPAIN</p>
+                <p class="desc">Topped global bookings with its perfect blend of Gaudí architecture, Mediterranean beaches, and vibrant culture.</p>
+                <button class="learn-more">Learn More →</button>
             </div>
         </div>
 
-        <div style="text-align:center; margin-top:40px; padding:20px; background:rgba(255, 255, 255, 0.1); border-radius:10px;">
-            <p style="color:rgba(255, 255, 255, 0.9); font-size:0.9rem;">📊 Data from Tripadvisor, eDreams ODIGEO, and global tourism boards (2025)</p>
+        <div class="pass-card trending-card" onclick="openTrendingPopup('Paris', 'France', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800', 'Eiffel Tower, Louvre Museum, Notre-Dame Cathedral, Arc de Triomphe, Versailles Palace', 'Romance and art, croissants and wine, fashion capital, Seine River cruises, café culture')">
+            <span class="trending-tag">#1 Arrivals</span>
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800" alt="Paris">
+            <div class="pass-body">
+                <h3>Paris</h3>
+                <p class="country">FRANCE</p>
+                <p class="desc">Maintained its crown with 18M+ visitors, enhanced by Notre Dame's reopening.</p>
+                <button class="learn-more">Learn More →</button>
+            </div>
+        </div>
+
+        <div class="pass-card trending-card" onclick="openTrendingPopup('London', 'United Kingdom', 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800', 'Big Ben, Tower Bridge, Buckingham Palace, British Museum, London Eye', 'Royal heritage, West End theatre, afternoon tea, red double-decker buses, diverse food scene')">
+            <span class="trending-tag">#1 Searched</span>
+            <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800" alt="London">
+            <div class="pass-body">
+                <h3>London</h3>
+                <p class="country">UNITED KINGDOM</p>
+                <p class="desc">The most searched-for destination globally, blending royal heritage with cutting-edge entertainment.</p>
+                <button class="learn-more">Learn More →</button>
+            </div>
+        </div>
+
+        <div class="pass-card trending-card" onclick="openTrendingPopup('Tokyo', 'Japan', 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800', 'Senso-ji Temple, Tokyo Skytree, Shibuya Crossing, Meiji Shrine, Tsukiji Fish Market', 'Sushi and ramen, cherry blossoms, anime culture, cutting-edge technology, ancient temples')">
+            <span class="trending-tag">#2 Global</span>
+            <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800" alt="Tokyo">
+            <div class="pass-body">
+                <h3>Tokyo</h3>
+                <p class="country">JAPAN</p>
+                <p class="desc">Captivated travelers with its seamless fusion of ancient temples and futuristic technology.</p>
+                <button class="learn-more">Learn More →</button>
+            </div>
+        </div>
+
+        <div class="pass-card trending-card" onclick="openTrendingPopup('Osaka', 'Japan', 'https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800', 'Osaka Castle, Dotonbori District, Universal Studios Japan, Osaka Aquarium, Sumiyoshi Taisha Shrine', 'Street food paradise, takoyaki and okonomiyaki, vibrant nightlife, shopping districts, comedy culture')">
+            <span class="trending-tag">#1 Trending</span>
+            <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800" alt="Osaka">
+            <div class="pass-body">
+                <h3>Osaka</h3>
+                <p class="country">JAPAN</p>
+                <p class="desc">Named the world's fastest-growing destination with incredible food and nightlife.</p>
+                <button class="learn-more">Learn More →</button>
+            </div>
+        </div>
+
+        <div class="pass-card trending-card" onclick="openTrendingPopup('Bangkok', 'Thailand', 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800', 'Grand Palace, Wat Arun, Wat Pho, Chatuchak Market, Khao San Road', 'Street food heaven, ornate temples, floating markets, Thai massage, vibrant nightlife and shopping')">
+            <span class="trending-tag">30M+ Visitors</span>
+            <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800" alt="Bangkok">
+            <div class="pass-body">
+                <h3>Bangkok</h3>
+                <p class="country">THAILAND</p>
+                <p class="desc">Led Asia with 30.3M arrivals, offering temples, street food, and vibrant nightlife.</p>
+                <button class="learn-more">Learn More →</button>
+            </div>
         </div>
     </div>
+
+    <div class="data-credit">📊 Data from Tripadvisor, eDreams ODIGEO, and global tourism boards (2025)</div>
 </section>
+
 <!-- TIPS -->
 <section class="tips-section">
-    <h2>Essential Travel Tips</h2>
+    <div class="section-head">
+        <span class="eyebrow">Before You Go</span>
+        <h2>Essential Travel Tips</h2>
+    </div>
     <div class="tips-container">
         <div class="tip-card">
             <h3>🧳 Pack Smart</h3>
@@ -490,43 +667,59 @@ footer{
 
 <!-- FILTER DESTINATIONS -->
 <section id="filter">
+    <div class="section-head">
+        <span class="eyebrow">Browse by Mood</span>
+        <h2>Explore Destinations</h2>
+    </div>
     <div class="filters">
-        <button onclick="filterDest('all')">All</button>
-        <button onclick="filterDest('beach')">Beach</button>
-        <button onclick="filterDest('city')">City</button>
-        <button onclick="filterDest('mountain')">Mountain</button>
-        <button onclick="filterDest('luxury')">Luxury</button>
+        <button onclick="filterDest('all', this)" class="active">All</button>
+        <button onclick="filterDest('beach', this)">Beach</button>
+        <button onclick="filterDest('city', this)">City</button>
+        <button onclick="filterDest('mountain', this)">Mountain</button>
+        <button onclick="filterDest('luxury', this)">Luxury</button>
     </div>
 
-    <section class="grid-destinations">
-        <div class="card beach">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-            <h3>Maldives</h3>
-            <p>Crystal-clear waters and luxury resorts.</p>
-            <button onclick="openPopup('Maldives','Tropical paradise with white-sand beaches.','https://images.unsplash.com/photo-1507525428034-b723cf961d3e')">View</button>
+    <div class="grid-destinations">
+        <div class="pass-card beach">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Maldives">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Maldives</h3>
+                <p>Crystal-clear waters and luxury resorts.</p>
+                <button onclick="openPopup('Maldives','Tropical paradise with white-sand beaches.','https://images.unsplash.com/photo-1507525428034-b723cf961d3e')">View</button>
+            </div>
         </div>
 
-        <div class="card city">
-            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34">
-            <h3>Paris</h3>
-            <p>City of love and iconic landmarks.</p>
-            <button onclick="openPopup('Paris','Art, culture and Eiffel Tower.','https://images.unsplash.com/photo-1502602898657-3e91760cbb34')">View</button>
+        <div class="pass-card city">
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34" alt="Paris">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Paris</h3>
+                <p>City of love and iconic landmarks.</p>
+                <button onclick="openPopup('Paris','Art, culture and Eiffel Tower.','https://images.unsplash.com/photo-1502602898657-3e91760cbb34')">View</button>
+            </div>
         </div>
 
-        <div class="card mountain">
-            <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b">
-            <h3>Swiss Alps</h3>
-            <p>Snowy peaks and adventure.</p>
-            <button onclick="openPopup('Swiss Alps','Perfect for skiing and hiking.','https://images.unsplash.com/photo-1549880338-65ddcdfd017b')">View</button>
+        <div class="pass-card mountain">
+            <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b" alt="Swiss Alps">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Swiss Alps</h3>
+                <p>Snowy peaks and adventure.</p>
+                <button onclick="openPopup('Swiss Alps','Perfect for skiing and hiking.','https://images.unsplash.com/photo-1549880338-65ddcdfd017b')">View</button>
+            </div>
         </div>
 
-        <div class="card luxury">
-            <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad">
-            <h3>Dubai</h3>
-            <p>Luxury shopping and desert safaris.</p>
-            <button onclick="openPopup('Dubai','Luxury, skyscrapers, and desert adventures.','https://images.unsplash.com/photo-1505761671935-60b3a7427bad')">View</button>
+        <div class="pass-card luxury">
+            <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad" alt="Dubai">
+            <div class="perforation"></div>
+            <div class="pass-body">
+                <h3>Dubai</h3>
+                <p>Luxury shopping and desert safaris.</p>
+                <button onclick="openPopup('Dubai','Luxury, skyscrapers, and desert adventures.','https://images.unsplash.com/photo-1505761671935-60b3a7427bad')">View</button>
+            </div>
         </div>
-    </section>
+    </div>
 </section>
 
 <!-- POPUP -->
@@ -534,47 +727,45 @@ footer{
     <div class="popup-content">
         <span class="close" onclick="closePopup()">&times;</span>
         <img id="popup-img">
-        <h2 id="popup-title"></h2>
-        <p id="popup-text"></p>
+        <div class="popup-inner">
+            <h2 id="popup-title"></h2>
+            <p id="popup-text"></p>
+        </div>
     </div>
 </div>
+
 <!-- TRENDING DESTINATION POPUP -->
-<div id="trending-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000; overflow-y:auto;">
-    <div style="background:white; max-width:600px; width:90%; margin:20px; padding:0; border-radius:15px; position:relative; max-height:90vh; overflow-y:auto;">
-        <span onclick="closeTrendingPopup()" style="position:absolute; top:15px; right:20px; font-size:28px; cursor:pointer; z-index:10; color:white; text-shadow:0 2px 4px rgba(0,0,0,0.5);">&times;</span>
-        
-        <img id="trending-popup-img" style="width:100%; height:250px; object-fit:cover; border-radius:15px 15px 0 0;">
-        
-        <div style="padding:30px;">
-            <h2 id="trending-popup-title" style="font-size:2rem; margin-bottom:5px; color:#333;"></h2>
-            <p id="trending-popup-country" style="font-size:1.1rem; color:#667eea; margin-bottom:25px; font-weight:600;"></p>
-            
-            <div style="margin-bottom:25px;">
-                <h3 style="font-size:1.3rem; color:#333; margin-bottom:15px; display:flex; align-items:center;">
-                    <span style="font-size:1.5rem; margin-right:10px;">📍</span> Top Things To Do
-                </h3>
-                <ul id="trending-popup-todo" style="list-style:none; padding:0; line-height:2;">
-                </ul>
+<div id="trending-popup" class="trending-popup">
+    <div class="trending-popup-content">
+        <span class="close" onclick="closeTrendingPopup()">&times;</span>
+        <img id="trending-popup-img" alt="">
+        <div class="tp-body">
+            <h2 id="trending-popup-title"></h2>
+            <p id="trending-popup-country" class="tp-country"></p>
+
+            <div class="tp-section">
+                <h3>📍 Top Things To Do</h3>
+                <ul id="trending-popup-todo"></ul>
             </div>
-            
-            <div>
-                <h3 style="font-size:1.3rem; color:#333; margin-bottom:15px; display:flex; align-items:center;">
-                    <span style="font-size:1.5rem; margin-right:10px;">⭐</span> Famous For
-                </h3>
-                <ul id="trending-popup-famous" style="list-style:none; padding:0; line-height:2;">
-                </ul>
+
+            <div class="tp-section">
+                <h3>⭐ Famous For</h3>
+                <ul id="trending-popup-famous"></ul>
             </div>
         </div>
     </div>
 </div>
 
 <footer>
-    © 2026 TravelGo | All Rights Reserved
+    © 2026 TravelGo · All Rights Reserved
 </footer>
 
 <script>
-function filterDest(category) {
-    let cards = document.querySelectorAll('.grid-destinations .card');
+function filterDest(category, btn) {
+    document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    let cards = document.querySelectorAll('.grid-destinations .pass-card');
     cards.forEach(card => {
         if (category === 'all' || card.classList.contains(category)) {
             card.style.display = 'block';
@@ -593,46 +784,36 @@ function openPopup(title, text, img) {
 
 function closePopup() {
     document.getElementById('popup').style.display = 'none';
-
 }
+
 function openTrendingPopup(title, country, img, thingsToDo, famousFor) {
     document.getElementById('trending-popup-title').innerText = title;
     document.getElementById('trending-popup-country').innerText = country;
     document.getElementById('trending-popup-img').src = img;
-    
-    // Parse and display things to do
+
     const todoList = document.getElementById('trending-popup-todo');
     todoList.innerHTML = '';
     thingsToDo.split(', ').forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `<span style="color:#667eea; margin-right:8px;">✓</span><span style="color:#333;">${item}</span>`;
-        li.style.padding = '8px 0';
-        li.style.borderBottom = '1px solid #f0f0f0';
+        li.innerHTML = `<span style="color:#C9542C;">✓</span><span>${item}</span>`;
         todoList.appendChild(li);
     });
-    
-    // Parse and display famous for
+
     const famousList = document.getElementById('trending-popup-famous');
     famousList.innerHTML = '';
     famousFor.split(', ').forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `<span style="color:#ff9f1a; margin-right:8px;">★</span><span style="color:#333;">${item}</span>`;
-        li.style.padding = '8px 0';
-        li.style.borderBottom = '1px solid #f0f0f0';
+        li.innerHTML = `<span style="color:#E8A33D;">★</span><span>${item}</span>`;
         famousList.appendChild(li);
     });
-    
+
     document.getElementById('trending-popup').style.display = 'flex';
 }
+
 function closeTrendingPopup() {
     document.getElementById('trending-popup').style.display = 'none';
 }
-
 </script>
-
-
-
-
 
 </body>
 </html>
